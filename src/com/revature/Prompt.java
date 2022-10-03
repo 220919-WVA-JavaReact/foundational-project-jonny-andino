@@ -14,10 +14,12 @@ public class Prompt {
 
     public String getPass(String question){
         Console cons;
+
         if ((cons = System.console()) != null){
             char[] pass = cons.readPassword(question);
             return new String(pass);
         }
-        return "console was null";
+
+        return "";
     }
 }

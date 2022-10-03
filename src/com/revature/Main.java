@@ -1,6 +1,7 @@
 package com.revature;
 
 public class Main {
+
     public static void main(String[] args) {
         Prompt userPrompt = new Prompt();
         String uname = userPrompt.ask("Please input a username.");
