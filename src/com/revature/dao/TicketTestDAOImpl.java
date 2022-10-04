@@ -2,9 +2,7 @@ package com.revature.dao;
 
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
-import com.revature.service.TicketStatus;
-
-import java.sql.Timestamp;
+import com.revature.util.TicketStatus;
 
 public class TicketTestDAOImpl implements TicketDAO{
 

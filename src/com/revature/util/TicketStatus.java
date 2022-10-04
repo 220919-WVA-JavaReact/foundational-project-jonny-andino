@@ -1,4 +1,4 @@
-package com.revature.service;
+package com.revature.util;
 
 public enum TicketStatus {
     OPEN,

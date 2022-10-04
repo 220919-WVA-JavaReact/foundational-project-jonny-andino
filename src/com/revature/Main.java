@@ -1,16 +1,51 @@
 package com.revature;
 
+import com.revature.model.User;
 import com.revature.service.UserService;
+import com.revature.util.Prompt;
 
 public class Main {
 
     public static void main(String[] args) {
-        Prompt userPrompt = new Prompt();
+        Prompt mainPrompt = new Prompt();
         UserService us = new UserService();
+        User loggedInUser = null;
 
-        String uname = userPrompt.ask("Please input a username.");
+        System.out.println("Welcome! Please choose one of the following options");
+        System.out.println("1 - Login");
+        System.out.println("2 - Register an account");
 
-        String pass = userPrompt.ask("Please enter your Password");
-        us.login(uname, pass);
+        switch(Integer.parseInt(mainPrompt.ask())){
+            case 1: // login
+                loggedInUser = us.login();
+                break;
+            case 2: // register
+                loggedInUser = us.register();
+                break;
+            default:
+                System.out.println("Invalid input... Restarting");
+                main(new String[]{});
+        }
+
+        if (loggedInUser != null){
+            System.out.println("Welcome back, " + loggedInUser.getUsername() + "!");
+            System.out.println("What would you like to do today?");
+            System.out.println("1 - Create a reimbursement ticket");
+            System.out.println("2 - View existing ticket(s)");
+            if (loggedInUser.isAdmin()) {
+                System.out.println("3 - Admin dashboard");
+            }
+
+            switch(Integer.parseInt(mainPrompt.ask())){
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
+        }
     }
 }

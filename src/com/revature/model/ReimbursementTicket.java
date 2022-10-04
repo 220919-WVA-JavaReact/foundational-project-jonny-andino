@@ -1,7 +1,7 @@
 package com.revature.model;
 
 
-import com.revature.service.TicketStatus;
+import com.revature.util.TicketStatus;
 
 import java.sql.Timestamp;
 import java.util.Objects;
