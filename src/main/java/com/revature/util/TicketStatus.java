@@ -1,7 +1,7 @@
 package com.revature.util;
 
 public enum TicketStatus {
-    OPEN,
+    PENDING,
     UNDER_REVIEW,
     APPROVED,
     REJECTED

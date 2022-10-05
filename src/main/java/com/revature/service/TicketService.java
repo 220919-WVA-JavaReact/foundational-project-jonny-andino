@@ -13,7 +13,7 @@ public class TicketService {
     public void submitTicket(int userId){
         String amount = ticketPrompt.ask("Please enter the amount for your reimbursement");
         String description = ticketPrompt.ask("Please enter a short description of what this reimbursement is for.");
-        ReimbursementTicket t = new ReimbursementTicket(userId, Double.parseDouble(amount), description, TicketStatus.OPEN);
+        ReimbursementTicket t = new ReimbursementTicket(userId, Double.parseDouble(amount), description, TicketStatus.PENDING);
         //logic for posting the ticket to the db
         System.out.println(t);
     }

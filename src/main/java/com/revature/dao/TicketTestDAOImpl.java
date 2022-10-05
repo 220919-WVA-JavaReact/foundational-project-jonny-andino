@@ -7,8 +7,8 @@ import com.revature.util.TicketStatus;
 public class TicketTestDAOImpl implements TicketDAO{
 
     ReimbursementTicket[] tickets = {
-        new ReimbursementTicket(0,0,1000.00,"Work Laptop", TicketStatus.OPEN),
-        new ReimbursementTicket(1,0,20.00,"Lunch on the boss today", TicketStatus.OPEN)
+        new ReimbursementTicket(0,0,1000.00,"Work Laptop", TicketStatus.PENDING),
+        new ReimbursementTicket(1,0,20.00,"Lunch on the boss today", TicketStatus.PENDING)
     };
 
 
