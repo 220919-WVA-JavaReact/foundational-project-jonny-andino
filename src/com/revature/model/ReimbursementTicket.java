@@ -1,6 +1,5 @@
 package com.revature.model;
 
-
 import com.revature.util.TicketStatus;
 
 import java.sql.Timestamp;
@@ -27,6 +26,13 @@ public class ReimbursementTicket {
 
     public ReimbursementTicket(int id, int userId, double amount, String description, TicketStatus status) {
         this.id = id;
+        this.userId = userId;
+        this.amount = amount;
+        this.description = description;
+        this.status = status;
+    }
+
+    public ReimbursementTicket(int userId, double amount, String description, TicketStatus status) {
         this.userId = userId;
         this.amount = amount;
         this.description = description;

@@ -1,6 +1,7 @@
 package com.revature;
 
 import com.revature.model.User;
+import com.revature.service.TicketService;
 import com.revature.service.UserService;
 import com.revature.util.Prompt;
 
@@ -9,6 +10,7 @@ public class Main {
     public static void main(String[] args) {
         Prompt mainPrompt = new Prompt();
         UserService us = new UserService();
+        TicketService ts = new TicketService();
         User loggedInUser = null;
 
         System.out.println("Welcome! Please choose one of the following options");
@@ -37,13 +39,13 @@ public class Main {
             }
 
             switch(Integer.parseInt(mainPrompt.ask())){
-                case 1:
+                case 1: // create a ticket
+                    ts.submitTicket(loggedInUser.getId());
                     break;
-                case 2:
+                case 2: // view tickets
+                    ts.displayUserTickets(loggedInUser.getId());
                     break;
-                case 3:
-                    break;
-                case 4:
+                case 3: // admin menu
                     break;
             }
         }
