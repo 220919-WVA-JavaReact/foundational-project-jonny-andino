@@ -3,7 +3,7 @@ package com.revature.service;
 import com.revature.dao.TicketDAO;
 import com.revature.dao.TicketTestDAOImpl;
 import com.revature.model.ReimbursementTicket;
-import com.revature.util.Prompt;
+import com.revature.controller.Prompt;
 import com.revature.util.TicketStatus;
 
 public class TicketService {

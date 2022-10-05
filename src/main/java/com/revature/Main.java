@@ -3,7 +3,7 @@ package com.revature;
 import com.revature.model.User;
 import com.revature.service.TicketService;
 import com.revature.service.UserService;
-import com.revature.util.Prompt;
+import com.revature.controller.Prompt;
 
 public class Main {
 

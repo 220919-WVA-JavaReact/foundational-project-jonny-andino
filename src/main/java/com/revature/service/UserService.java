@@ -3,7 +3,7 @@ package com.revature.service;
 import com.revature.dao.UserDAO;
 import com.revature.dao.UserDAOImpl;
 import com.revature.model.User;
-import com.revature.util.Prompt;
+import com.revature.controller.Prompt;
 
 public class UserService {
 
