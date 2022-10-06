@@ -37,7 +37,6 @@ public class ConnectionUtil {
             System.out.println("Couldn't establish connection...");
             throw new RuntimeException(e);
         }
-
         return conn;
     }
 }

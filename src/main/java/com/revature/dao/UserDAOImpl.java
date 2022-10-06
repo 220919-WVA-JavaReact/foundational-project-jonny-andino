@@ -2,7 +2,6 @@ package com.revature.dao;
 
 import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
-import com.revature.util.TicketStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
