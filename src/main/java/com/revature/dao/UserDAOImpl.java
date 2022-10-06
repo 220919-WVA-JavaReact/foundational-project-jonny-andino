@@ -36,4 +36,9 @@ public class UserDAOImpl implements UserDAO{
         }
         return u;
     }
+
+    @Override
+    public User registerNewUser() {
+        return null;
+    }
 }

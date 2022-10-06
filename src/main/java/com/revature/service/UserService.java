@@ -7,7 +7,7 @@ import com.revature.controller.Prompt;
 
 public class UserService {
 
-    Prompt userPrompt = new Prompt();
+    Prompt userPrompt = Prompt.getPrompt();
     public User login(){
 
         String uname = userPrompt.ask("Please input a username.");

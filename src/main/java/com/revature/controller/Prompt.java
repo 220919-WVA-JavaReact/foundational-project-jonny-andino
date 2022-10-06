@@ -3,8 +3,15 @@ package com.revature.controller;
 import java.util.Scanner;
 
 public class Prompt {
-
-    public static Scanner input = new Scanner(System.in);
+    private static Prompt p = null;
+    private Prompt(){};
+    public static Prompt getPrompt(){
+        if (p == null) {
+            p = new Prompt();
+        }
+        return p;
+    }
+    private static final Scanner input = new Scanner(System.in);
     public String ask(String question) {
 
         System.out.println(question);

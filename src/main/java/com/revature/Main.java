@@ -8,7 +8,7 @@ import com.revature.controller.Prompt;
 public class Main {
 
     public static void main(String[] args) {
-        Prompt mainPrompt = new Prompt();
+        Prompt mainPrompt = Prompt.getPrompt();
         UserService us = new UserService();
         TicketService ts = new TicketService();
         User loggedInUser = null;
@@ -40,10 +40,10 @@ public class Main {
 
             switch(Integer.parseInt(mainPrompt.ask())){
                 case 1: // create a ticket
-                    ts.submitTicket(loggedInUser.getId());
+                    ts.submitTicket(loggedInUser);
                     break;
                 case 2: // view tickets
-                    ts.displayUserTickets(loggedInUser.getId());
+                    ts.displayUserTickets(loggedInUser);
                     break;
                 case 3: // admin menu
                     break;
