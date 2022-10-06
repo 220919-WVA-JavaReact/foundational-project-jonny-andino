@@ -31,7 +31,7 @@ public class ConnectionUtil {
         String password = System.getenv("password");
 
         try {
-            System.out.println("Creating new connection...");
+            //System.out.println("Creating new connection...");
             conn = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
             System.out.println("Couldn't establish connection...");

@@ -19,7 +19,7 @@ public class Main {
                 mainPrompt.say("Welcome! Please choose one of the following options");
                 mainPrompt.say("1 - Login");
                 mainPrompt.say("2 - Register an account");
-                mainPrompt.say("q - Quit program");
+                mainPrompt.say("3 - Quit program");
 
                 switch(mainPrompt.ask()){
                     case "1": // login
@@ -28,7 +28,7 @@ public class Main {
                     case "2": // register
                         loggedInUser = us.register();
                         break;
-                    case "q":
+                    case "3":
                         running = false;
                         break;
                     default:
@@ -38,6 +38,7 @@ public class Main {
             } else {
                 mainPrompt.label("USER DASHBOARD");
                 mainPrompt.say("Welcome, " + loggedInUser.getUsername() + "!");
+                mainPrompt.say("Your user role: " + ((loggedInUser.isAdmin()) ? "Administrator" : "Employee"));
                 mainPrompt.say("What would you like to do today?");
                 mainPrompt.say("1 - Create a reimbursement ticket");
                 mainPrompt.say("2 - View existing ticket(s)");

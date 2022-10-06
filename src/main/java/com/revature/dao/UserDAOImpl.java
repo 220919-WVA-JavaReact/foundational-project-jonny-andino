@@ -32,7 +32,7 @@ public class UserDAOImpl implements UserDAO{
                 u = new User(id,uname,pass,isAdmin);
             }
         } catch(SQLException e){
-            System.out.println("No user found.");
+            //System.out.println("No user found.");
         }
         return u;
     }

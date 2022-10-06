@@ -13,13 +13,14 @@ public class UserService {
         String uname = userPrompt.ask("Please input a username.");
         String pass  = userPrompt.ask("Please enter your Password");
 
+        userPrompt.say("Logging in...");
         UserDAO userDao = new UserDAOImpl();
         User u = userDao.getByUsername(uname);
 
         if (u != null && u.getPassword().equals(pass)) {
-            System.out.println(u);
             return u;
         }
+        
         userPrompt.say("We're sorry, we didn't find an account matching this information.");
         userPrompt.say("Enter 1 to try again, or press Enter to exit.");
 
@@ -35,6 +36,7 @@ public class UserService {
 
         String uname = userPrompt.ask("Please register a username.");
         String pass = userPrompt.ask("Please register a password.");
+        userPrompt.say("Validating registration...");
         User foundUser = userDao.getByUsername(uname);
 
         if (foundUser == null){

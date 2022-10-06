@@ -7,7 +7,6 @@ import com.revature.controller.Prompt;
 import com.revature.model.User;
 import com.revature.util.TicketStatus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TicketService {
@@ -15,14 +14,22 @@ public class TicketService {
 
     public void submitTicket(User loggedInUser){
         TicketDAO td = new TicketDAOImpl();
+        ReimbursementTicket t = null;
 
         String amount = ticketPrompt.ask("Please enter the amount for your reimbursement");
         String description = ticketPrompt.ask("Please enter a short description of what this reimbursement is for.");
-        ReimbursementTicket t = new ReimbursementTicket(loggedInUser, Double.parseDouble(amount), description);
-        if (td.postNewTicket(t)) {
-            System.out.println("Success!");
-            System.out.println(t);
+
+        if (!amount.equals("") && !description.equals("")){
+            t = new ReimbursementTicket(loggedInUser, Double.parseDouble(amount), description);
+
+            if (td.postNewTicket(t)) {
+                ticketPrompt.say("Successfully created ticket!");
+            }
+        } else {
+            ticketPrompt.say("Please be sure to add a full amount and description to your ticket.");
+            submitTicket(loggedInUser);
         }
+
     }
 
     public void displayUserTickets(User user){
