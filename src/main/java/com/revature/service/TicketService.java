@@ -6,6 +6,9 @@ import com.revature.model.ReimbursementTicket;
 import com.revature.controller.Prompt;
 import com.revature.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TicketService {
     Prompt ticketPrompt = Prompt.getPrompt();
     TicketDAO td = new TicketDAOImpl();
@@ -19,6 +22,6 @@ public class TicketService {
     }
 
     public void displayUserTickets(User user){
-
+        List<ReimbursementTicket> tickets = td.getTicketsByUser(user);
     }
 }

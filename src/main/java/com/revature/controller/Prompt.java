@@ -18,6 +18,10 @@ public class Prompt {
         return input.nextLine();
     }
 
+    public void say(String msg){
+        System.out.println(msg);
+    }
+
     public static String ask(){
         return input.nextLine();
     }

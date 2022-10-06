@@ -20,16 +20,26 @@ public class UserService {
             System.out.println(u);
             return u;
         }
+        userPrompt.say("We're sorry, we didn't find an account matching this information.");
+        userPrompt.say("Enter 1 to try again, or press Enter to exit.");
 
-        return null;
+        if (userPrompt.ask().equals("1")){
+            u = login();
+        }
+        return u;
     }
 
     public User register(){
-        String uname = userPrompt.ask("Please register a username.");
-        String pass  = userPrompt.ask("Please register a password.");
+        UserDAO userDao = new UserDAOImpl();
 
+        String uname = userPrompt.ask("Please register a username.");
+
+
+        User foundUser = userDao.getByUsername(uname);
+
+        String pass  = userPrompt.ask("Please register a password.");
         // validation stuff
 
-        return new User(0, uname, pass, false);
+        return userDao.registerNewUser(uname, pass);
     }
 }

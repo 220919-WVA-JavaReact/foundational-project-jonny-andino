@@ -11,7 +11,7 @@ public interface TicketDAO {
 
     ReimbursementTicket postNewTicket();
 
-    List<ReimbursementTicket> getTicketsByUserId(User user);
+    List<ReimbursementTicket> getTicketsByUser(User user);
 
 
 }

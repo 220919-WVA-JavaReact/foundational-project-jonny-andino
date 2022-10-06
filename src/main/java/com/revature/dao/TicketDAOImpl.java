@@ -3,6 +3,7 @@ package com.revature.dao;
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TicketDAOImpl implements TicketDAO{
@@ -17,7 +18,8 @@ public class TicketDAOImpl implements TicketDAO{
     }
 
     @Override
-    public List<ReimbursementTicket> getTicketsByUserId(User user) {
-        return null;
+    public List<ReimbursementTicket> getTicketsByUser(User user) {
+
+        return new ArrayList<>();
     }
 }
