@@ -9,7 +9,7 @@ public interface TicketDAO {
 
     ReimbursementTicket getTicketById(int id);
 
-    ReimbursementTicket postNewTicket();
+    boolean postNewTicket(ReimbursementTicket ticket);
 
     List<ReimbursementTicket> getTicketsByUser(User user);
 

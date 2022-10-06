@@ -31,15 +31,22 @@ public class UserService {
 
     public User register(){
         UserDAO userDao = new UserDAOImpl();
+        User newUser = null;
 
         String uname = userPrompt.ask("Please register a username.");
-
-
+        String pass = userPrompt.ask("Please register a password.");
         User foundUser = userDao.getByUsername(uname);
 
-        String pass  = userPrompt.ask("Please register a password.");
-        // validation stuff
+        if (foundUser == null){
+            newUser = userDao.registerNewUser(uname, pass);
+            return newUser;
+        }
+        userPrompt.say("Sorry, a user with that username already exists.");
+        userPrompt.say("Enter 1 to try again, or press Enter to exit.");
 
-        return userDao.registerNewUser(uname, pass);
+        if (userPrompt.ask().equals("1")){
+            newUser = register();
+        }
+        return newUser;
     }
 }

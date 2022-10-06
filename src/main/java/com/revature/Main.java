@@ -12,41 +12,54 @@ public class Main {
         UserService us = new UserService();
         TicketService ts = new TicketService();
         User loggedInUser = null;
+        boolean running = true;
 
-        mainPrompt.say("Welcome! Please choose one of the following options");
-        mainPrompt.say("1 - Login");
-        mainPrompt.say("2 - Register an account");
+        while(running){
+            if (loggedInUser == null){
+                mainPrompt.say("Welcome! Please choose one of the following options");
+                mainPrompt.say("1 - Login");
+                mainPrompt.say("2 - Register an account");
+                mainPrompt.say("q - Quit program");
 
-        switch(Integer.parseInt(mainPrompt.ask())){
-            case 1: // login
-                loggedInUser = us.login();
-                break;
-            case 2: // register
-                loggedInUser = us.register();
-                break;
-            default:
-                System.out.println("Invalid input... Restarting");
-                main(new String[]{});
-        }
+                switch(mainPrompt.ask()){
+                    case "1": // login
+                        loggedInUser = us.login();
+                        break;
+                    case "2": // register
+                        loggedInUser = us.register();
+                        break;
+                    case "q":
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Invalid input... Restarting");
+                }
 
-        if (loggedInUser != null){
-            System.out.println("Welcome, " + loggedInUser.getUsername() + "!");
-            System.out.println("What would you like to do today?");
-            System.out.println("1 - Create a reimbursement ticket");
-            System.out.println("2 - View existing ticket(s)");
-            if (loggedInUser.isAdmin()) {
-                System.out.println("3 - Admin dashboard");
-            }
+            } else {
+                mainPrompt.label("USER DASHBOARD");
+                mainPrompt.say("Welcome, " + loggedInUser.getUsername() + "!");
+                mainPrompt.say("What would you like to do today?");
+                mainPrompt.say("1 - Create a reimbursement ticket");
+                mainPrompt.say("2 - View existing ticket(s)");
+                mainPrompt.say("3 - Logout");
+                if (loggedInUser.isAdmin()) {
+                    System.out.println("4 - Admin dashboard");
+                }
 
-            switch(Integer.parseInt(mainPrompt.ask())){
-                case 1: // create a ticket
-                    ts.submitTicket(loggedInUser);
-                    break;
-                case 2: // view tickets
-                    ts.displayUserTickets(loggedInUser);
-                    break;
-                case 3: // admin menu
-                    break;
+                switch(Integer.parseInt(mainPrompt.ask())){
+                    case 1: // create a ticket
+                        ts.submitTicket(loggedInUser);
+                        break;
+                    case 2: // view tickets
+                        ts.displayUserTickets(loggedInUser);
+                        break;
+                    case 3: // logout
+                        mainPrompt.say("logging out...");
+                        loggedInUser = null;
+                        break;
+                    case 4: // admin menu
+                        break;
+                }
             }
         }
     }

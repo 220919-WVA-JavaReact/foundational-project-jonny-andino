@@ -22,6 +22,10 @@ public class Prompt {
         System.out.println(msg);
     }
 
+    public void label(String label){
+        System.out.println("---------" + label + "---------");
+    }
+
     public static String ask(){
         return input.nextLine();
     }
