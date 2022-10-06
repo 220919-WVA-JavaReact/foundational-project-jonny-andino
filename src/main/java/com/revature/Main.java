@@ -48,7 +48,7 @@ public class Main {
                     mainPrompt.say("3 - View existing ticket" + ((ticketCount > 1) ? "s (" + ticketCount + ")" : ""));
                 }
                 if (loggedInUser.isAdmin()) {
-                    System.out.println("4 - Admin dashboard");
+                    mainPrompt.say("4 - Admin dashboard");
                 }
 
                 switch(Integer.parseInt(mainPrompt.ask())){

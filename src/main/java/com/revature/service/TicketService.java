@@ -49,8 +49,8 @@ public class TicketService {
         ticketPrompt.say("Amount: $" + floorDoubleToPrecision(t.getAmount(), 2));
         ticketPrompt.say("Description: " + t.getDescription());
         ticketPrompt.say("Created Time: " + t.getCreatedTime());
-        if (t.getStatus() != TicketStatus.PENDING) {
-            ticketPrompt.say("Fulfilled Time: " + t.getCreatedTime());
+        if (t.getStatus() == TicketStatus.APPROVED || t.getStatus() == TicketStatus.REJECTED) {
+            ticketPrompt.say("Fulfilled Time: " + t.getFulfilledTime());
         }
     }
 

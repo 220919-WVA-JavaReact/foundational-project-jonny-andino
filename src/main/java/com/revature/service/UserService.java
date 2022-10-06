@@ -5,6 +5,7 @@ import com.revature.dao.UserDAOImpl;
 import com.revature.model.User;
 import com.revature.controller.Prompt;
 
+import java.util.Base64;
 import java.util.Map;
 
 public class UserService {
@@ -19,7 +20,9 @@ public class UserService {
         UserDAO userDao = new UserDAOImpl();
         User u = userDao.getByUsername(uname);
 
-        if (u != null && u.getPassword().equals(pass)) {
+        String encodedPass = Base64.getEncoder().encodeToString(pass.getBytes());
+
+        if (u != null && u.getPassword().equals(encodedPass)) {
             return u;
         }
 
@@ -38,11 +41,13 @@ public class UserService {
 
         String uname = userPrompt.ask("Please register a username.");
         String pass = userPrompt.ask("Please register a password.");
+
         userPrompt.say("Validating registration...");
         User foundUser = userDao.getByUsername(uname);
 
         if (foundUser == null){
-            newUser = userDao.registerNewUser(uname, pass);
+            String encodedPass = Base64.getEncoder().encodeToString(pass.getBytes());
+            newUser = userDao.registerNewUser(uname, encodedPass);
             return newUser;
         }
         userPrompt.say("Sorry, a user with that username already exists.");
