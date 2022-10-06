@@ -16,6 +16,7 @@ public class Main {
 
         while(running){
             if (loggedInUser == null){
+                mainPrompt.label("MAIN MENU");
                 mainPrompt.say("Welcome! Please choose one of the following options");
                 mainPrompt.say("1 - Login");
                 mainPrompt.say("2 - Register an account");
@@ -38,27 +39,35 @@ public class Main {
             } else {
                 mainPrompt.label("USER DASHBOARD");
                 mainPrompt.say("Welcome, " + loggedInUser.getUsername() + "!");
+                int ticketCount = us.displayTicketInfo(loggedInUser);
                 mainPrompt.say("Your user role: " + ((loggedInUser.isAdmin()) ? "Administrator" : "Employee"));
                 mainPrompt.say("What would you like to do today?");
-                mainPrompt.say("1 - Create a reimbursement ticket");
-                mainPrompt.say("2 - View existing ticket(s)");
-                mainPrompt.say("3 - Logout");
+                mainPrompt.say("1 - Logout");
+                mainPrompt.say("2 - Create a new Reimbursement Ticket");
+                if (ticketCount > 0) {
+                    mainPrompt.say("3 - View existing ticket" + ((ticketCount > 1) ? "s (" + ticketCount + ")" : ""));
+                }
                 if (loggedInUser.isAdmin()) {
                     System.out.println("4 - Admin dashboard");
                 }
 
                 switch(Integer.parseInt(mainPrompt.ask())){
-                    case 1: // create a ticket
-                        ts.submitTicket(loggedInUser);
-                        break;
-                    case 2: // view tickets
-                        ts.displayUserTickets(loggedInUser);
-                        break;
-                    case 3: // logout
-                        mainPrompt.say("logging out...");
+                    case 1: // logout
+                        mainPrompt.say("Logging out...");
                         loggedInUser = null;
                         break;
+                    case 2: // create ticket
+                        ts.submitTicket(loggedInUser);
+                        break;
+                    case 3: // view tickets
+                        ts.displayUserTickets(loggedInUser);
+                        break;
                     case 4: // admin menu
+                        if (!loggedInUser.isAdmin()) {
+                            mainPrompt.say("Sorry, you don't have access to this menu...");
+                        } else {
+                            // admin options
+                        }
                         break;
                 }
             }

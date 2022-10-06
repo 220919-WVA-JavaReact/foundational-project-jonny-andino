@@ -7,7 +7,9 @@ import com.revature.util.TicketStatus;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TicketDAOImpl implements TicketDAO{
     @Override
@@ -33,7 +35,7 @@ public class TicketDAOImpl implements TicketDAO{
             return (rowsUpdated > 0);
 
         } catch (SQLException e) {
-            System.out.println("Couldn't post timestamp");
+            //e.printStackTrace();
         }
 
         return false;
@@ -67,6 +69,7 @@ public class TicketDAOImpl implements TicketDAO{
         }
         return tickets;
     }
+
 
     private TicketStatus statusFromString(String str){
         // there's probably a better way to do this lol

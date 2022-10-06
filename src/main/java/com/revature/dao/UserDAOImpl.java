@@ -2,11 +2,14 @@ package com.revature.dao;
 
 import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
+import com.revature.util.TicketStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserDAOImpl implements UserDAO{
 
@@ -65,4 +68,36 @@ public class UserDAOImpl implements UserDAO{
         }
         return u;
     }
+
+    @Override
+    public Map<String, Integer> countUserTickets(User user)  {
+
+        Map<String, Integer> info = new HashMap<>();
+        info.put("Open", 0);
+        info.put("Closed", 0);
+
+        try (Connection conn = ConnectionUtil.getConnection()){
+            String sql = "SELECT * FROM tickets WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, user.getId());
+            ResultSet rs;
+
+            if ((rs = stmt.executeQuery()) != null) {
+                while (rs.next()){
+                    String status = rs.getString("status");
+                    if (status.equals("APPROVED") || status.equals("REJECTED")) {
+                        info.put("Closed", info.get("Closed") + 1);
+                    } else {
+                        info.put("Open", info.get("Open") + 1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return info;
+    }
+
 }

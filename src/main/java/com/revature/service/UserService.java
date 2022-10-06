@@ -5,6 +5,8 @@ import com.revature.dao.UserDAOImpl;
 import com.revature.model.User;
 import com.revature.controller.Prompt;
 
+import java.util.Map;
+
 public class UserService {
 
     Prompt userPrompt = Prompt.getPrompt();
@@ -20,7 +22,7 @@ public class UserService {
         if (u != null && u.getPassword().equals(pass)) {
             return u;
         }
-        
+
         userPrompt.say("We're sorry, we didn't find an account matching this information.");
         userPrompt.say("Enter 1 to try again, or press Enter to exit.");
 
@@ -50,5 +52,24 @@ public class UserService {
             newUser = register();
         }
         return newUser;
+    }
+
+    public int displayTicketInfo(User user){
+        UserDAO userDao = new UserDAOImpl();
+        Map<String, Integer> info = userDao.countUserTickets(user);
+        String out = "";
+        if (info.get("Open") > 0){
+            out += "\n" + info.get("Open") + " open ticket(s).";
+        }
+
+        if (info.get("Closed") > 0){
+            out += "\n" + info.get("Closed") + " closed ticket(s).";
+        }
+
+        if (!out.equals("")){
+            userPrompt.say("You have:" + out);
+        }
+
+        return info.get("Open") + info.get("Closed");
     }
 }
