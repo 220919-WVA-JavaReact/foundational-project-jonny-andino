@@ -27,7 +27,7 @@ public class UserService {
         }
 
         userPrompt.say("We're sorry, we didn't find an account matching this information.");
-        userPrompt.say("Enter 1 to try again, or press Enter to exit.");
+        userPrompt.say("Enter 1 to try again, or press Enter to return to Main Menu.");
 
         if (userPrompt.ask().equals("1")){
             u = login();
@@ -51,7 +51,7 @@ public class UserService {
             return newUser;
         }
         userPrompt.say("Sorry, a user with that username already exists.");
-        userPrompt.say("Enter 1 to try again, or press Enter to exit.");
+        userPrompt.say("Enter 1 to try again, or press Enter to return to Main Menu.");
 
         if (userPrompt.ask().equals("1")){
             newUser = register();
