@@ -28,4 +28,10 @@ public class Prompt {
     public void label(String label){
         System.out.println("---------" + label + "---------");
     }
+
+    public void clear(){
+        System.out.print("Everything on the console will cleared");
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
 }

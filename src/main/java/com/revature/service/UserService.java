@@ -62,19 +62,32 @@ public class UserService {
     public int displayTicketInfo(User user){
         UserDAO userDao = new UserDAOImpl();
         Map<String, Integer> info = userDao.countUserTickets(user);
+
+        // start with an empty string
         String out = "";
-        if (info.get("Open") > 0){
-            out += "\n" + info.get("Open") + " open ticket(s).";
+
+        // read the values from our map cuz we'll be referencing them a lot
+        int open   = info.get("Open");
+        int closed = info.get("Closed");
+
+        if (open > 0){
+            // if open has a value greater than zero, let's add a string to 'out'
+            // first a line break, then the value of out, then we add an 's' to the string
+            // only if that value is greater than one.
+            out += "\n" + open + " open ticket" + ((open > 1) ? "s" : "");
         }
 
-        if (info.get("Closed") > 0){
-            out += "\n" + info.get("Closed") + " closed ticket(s).";
+        if (closed > 0){
+            // this is the same thing but for closed tickets
+            out += "\n" + closed + " closed ticket" + ((closed > 1) ? "s" : "");
         }
 
         if (!out.equals("")){
+            // if we added anything at all, let's put it all together, adding
+            // "you have" to the beginning of the string.
             userPrompt.say("You have:" + out);
         }
 
-        return info.get("Open") + info.get("Closed");
+        return open + closed;
     }
 }
