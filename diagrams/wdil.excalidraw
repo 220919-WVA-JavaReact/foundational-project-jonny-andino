@@ -1,0 +1,46 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "vscode-webview://046ap819qgmv6dec3pdtdr0l4q687s36l3ci67dqq8g11b0eghev",
+  "elements": [
+    {
+      "id": "pYfYtcepQxIXCD6hI24Zf",
+      "type": "text",
+      "x": 398.671875,
+      "y": 222.67446899414062,
+      "width": 535,
+      "height": 225,
+      "angle": 0,
+      "strokeColor": "#000000",
+      "backgroundColor": "transparent",
+      "fillStyle": "hachure",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "strokeSharpness": "sharp",
+      "seed": 224422858,
+      "version": 134,
+      "versionNonce": 1195761750,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1665151771913,
+      "link": null,
+      "locked": false,
+      "text": "Thoughts/What did I learn?\n\n- a lot about java in general\n- interfaces are cool\n- how to spell \"Reimbursement\"",
+      "fontSize": 36,
+      "fontFamily": 1,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "baseline": 212,
+      "containerId": null,
+      "originalText": "Thoughts/What did I learn?\n\n- a lot about java in general\n- interfaces are cool\n- how to spell \"Reimbursement\""
+    }
+  ],
+  "appState": {
+    "gridSize": null,
+    "viewBackgroundColor": "#ffffff"
+  },
+  "files": {}
+}
