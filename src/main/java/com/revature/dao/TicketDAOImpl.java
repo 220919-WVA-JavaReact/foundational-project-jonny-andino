@@ -11,7 +11,36 @@ import java.util.*;
 public class TicketDAOImpl implements TicketDAO{
     @Override
     public ReimbursementTicket getTicketById(int id) {
-        return null;
+
+        ReimbursementTicket ticket = null;
+        UserDAO ud = new UserDAOImpl();
+
+        try (Connection conn = ConnectionUtil.getConnection()){
+            String sql = "SELECT * from tickets WHERE ticket_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1,id);
+            ResultSet rs;
+
+
+            if ((rs = stmt.executeQuery()) != null) {
+                rs.next();
+
+                int user_id = rs.getInt("user_id");
+                float amt = rs.getFloat("amount");
+                String desc = rs.getString("description");
+                TicketStatus status = statusFromString(rs.getString("status"));
+                Timestamp created = rs.getTimestamp("created_time");
+                Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
+
+                User foundUser = ud.getById(user_id);
+
+                ticket = new ReimbursementTicket(id,foundUser,amt,desc,status,created,fulfilled);
+            }
+        } catch(SQLException e){
+            //System.out.println("No user found.");
+        }
+        return ticket;
     }
 
     @Override
@@ -115,6 +144,24 @@ public class TicketDAOImpl implements TicketDAO{
 
     @Override
     public boolean updateTicketStatus(ReimbursementTicket ticket, TicketStatus status) {
+        try (Connection conn = ConnectionUtil.getConnection()){
+            String sql =
+                    "UPDATE tickets SET (status, fulfilled_time) = (?::ticket_status,?) " +
+                            "WHERE ticket_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1,status.toString());
+            stmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            stmt.setInt(3, ticket.getId());
+
+            int rowsUpdated = stmt.executeUpdate();
+
+            return (rowsUpdated > 0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 

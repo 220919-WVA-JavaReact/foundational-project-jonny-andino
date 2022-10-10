@@ -32,6 +32,48 @@ public class TicketService {
 
     }
 
+    public void reviewTicket(int id){
+        TicketDAO td = new TicketDAOImpl();
+
+        ReimbursementTicket ticket = td.getTicketById(id);
+        prettyPrint(ticket);
+
+        ticketPrompt.say("Once you have reviewed the ticket contents, please select a status to apply to the ticket.");
+        ticketPrompt.say("1 - Approve");
+        ticketPrompt.say("2 - Deny");
+        ticketPrompt.say("3 - Needs further review");
+
+        TicketStatus selection = ticket.getStatus();
+        boolean updated = true;
+
+        switch(ticketPrompt.ask()){
+            case "1":
+                selection = TicketStatus.APPROVED;
+                break;
+            case "2":
+                selection = TicketStatus.REJECTED;
+                break;
+            case "3":
+                selection = TicketStatus.UNDER_REVIEW;
+                break;
+            default:
+                updated = false;
+                ticketPrompt.say("Sorry, that wasn't a valid option");
+                ticketPrompt.say("Enter 1 to try again, or press Enter to return to the Admin Dashboard");
+                if (ticketPrompt.ask().equals("1")){
+                    reviewTicket(id);
+                }
+                break;
+        }
+
+        if (updated) {
+            ticketPrompt.say("Applying changes...");
+            if (td.updateTicketStatus(ticket, selection)){
+                ticketPrompt.say("Successfully applied update.");
+            }
+        }
+    }
+
     public void displayUserTickets(User user){
         TicketDAO td = new TicketDAOImpl();
 
@@ -42,6 +84,8 @@ public class TicketService {
         }
     }
 
+
+
     public void displayAllTickets(){
         TicketDAO td = new TicketDAOImpl();
 
@@ -49,6 +93,7 @@ public class TicketService {
 
         for (ReimbursementTicket ticket : tickets){
             prettyPrint(ticket);
+            ticketPrompt.say("Ticket ID: " + ticket.getId());
         }
     }
 
