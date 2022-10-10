@@ -42,6 +42,16 @@ public class TicketService {
         }
     }
 
+    public void displayAllTickets(){
+        TicketDAO td = new TicketDAOImpl();
+
+        List<ReimbursementTicket> tickets = td.getAllTickets();
+
+        for (ReimbursementTicket ticket : tickets){
+            prettyPrint(ticket);
+        }
+    }
+
     private void prettyPrint(ReimbursementTicket t){
         ticketPrompt.label("REIMBURSEMENT TICKET");
         ticketPrompt.say("Status: " + t.getStatus());

@@ -150,7 +150,8 @@ public class Main {
                             currentPage = Page.USER;
                             break;
                         case "3": // view all tickets
-
+                            mainPrompt.say("Getting all tickets...");
+                            ts.displayAllTickets();
                             break;
                     }
                     break;

@@ -2,6 +2,7 @@ package com.revature.dao;
 
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
+import com.revature.service.UserService;
 import com.revature.util.ConnectionUtil;
 import com.revature.util.TicketStatus;
 
@@ -66,6 +67,44 @@ public class TicketDAOImpl implements TicketDAO{
             e.printStackTrace();
         }
         return tickets;
+    }
+
+    @Override
+    public List<ReimbursementTicket> getAllTickets() {
+        List<ReimbursementTicket> tickets = new ArrayList<>();
+
+        UserDAO ud = new UserDAOImpl();
+
+        try (Connection conn = ConnectionUtil.getConnection()){
+            String sql = "SELECT * FROM tickets";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            ResultSet rs;
+
+            if ((rs = stmt.executeQuery()) != null) {
+                while (rs.next()){
+                    int id = rs.getInt("ticket_id");
+                    int user_id = rs.getInt("user_id");
+                    float amt = rs.getFloat("amount");
+                    String desc = rs.getString("description");
+                    TicketStatus status = statusFromString(rs.getString("status"));
+                    Timestamp created = rs.getTimestamp("created_time");
+                    Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
+
+                    User foundUser = ud.getById(user_id);
+
+                    tickets.add(new ReimbursementTicket(id,foundUser,amt,desc,status,created,fulfilled));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tickets;
+    }
+
+    @Override
+    public boolean updateTicketStatus(ReimbursementTicket ticket, TicketStatus status) {
+        return false;
     }
 
 

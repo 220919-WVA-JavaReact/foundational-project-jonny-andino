@@ -2,6 +2,7 @@ package com.revature.dao;
 
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
+import com.revature.util.TicketStatus;
 
 import java.util.List;
 
@@ -12,4 +13,8 @@ public interface TicketDAO {
     boolean postNewTicket(ReimbursementTicket ticket);
 
     List<ReimbursementTicket> getTicketsByUser(User user);
+
+    List<ReimbursementTicket> getAllTickets();
+
+    boolean updateTicketStatus(ReimbursementTicket ticket, TicketStatus status);
 }

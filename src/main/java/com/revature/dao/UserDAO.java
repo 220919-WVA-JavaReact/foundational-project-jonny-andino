@@ -7,6 +7,8 @@ import java.util.Map;
 public interface UserDAO {
     User getByUsername(String username);
 
+    User getById(int id);
+
     User registerNewUser(String username, String password);
 
     Map<String, Integer> countUserTickets(User user);

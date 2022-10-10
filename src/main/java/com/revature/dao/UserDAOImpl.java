@@ -40,6 +40,32 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
+    public User getById(int id) {
+        User u = null;
+
+        try (Connection conn = ConnectionUtil.getConnection()){
+            String sql = "SELECT * from users WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1,id);
+            ResultSet rs;
+
+            if ((rs = stmt.executeQuery()) != null) {
+                rs.next();
+
+                String uname = rs.getString("username");
+                String pass = rs.getString("password");
+                boolean isAdmin = rs.getBoolean("is_admin");
+
+                u = new User(id,uname,pass,isAdmin);
+            }
+        } catch(SQLException e){
+            //System.out.println("No user found.");
+        }
+        return u;
+    }
+
+    @Override
     public User registerNewUser(String username, String password) {
         User u = new User();
 
