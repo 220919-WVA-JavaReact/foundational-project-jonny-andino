@@ -6,8 +6,6 @@ import com.revature.service.TicketService;
 import com.revature.service.UserService;
 import com.revature.controller.Prompt;
 
-import java.text.BreakIterator;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -140,8 +138,9 @@ public class Main {
                     mainPrompt.say("Select an administrative action");
                     mainPrompt.say("1 - Logout");
                     mainPrompt.say("2 - User options");
-                    mainPrompt.say("3 - View open tickets");
-                    mainPrompt.say("4 - Respond to a Ticket (must provide ticket ID)");
+                    mainPrompt.say("3 - View pending tickets");
+                    mainPrompt.say("4 - View all tickets");
+                    mainPrompt.say("5 - Respond to a Ticket (must provide ticket ID)");
 
                     switch(mainPrompt.ask()){
                         case "1": // logout
@@ -154,10 +153,14 @@ public class Main {
                             currentPage = Page.USER;
                             break;
                         case "3": // view all tickets
-                            mainPrompt.say("Getting all tickets...");
-                            ts.displayAllTickets();
+                            mainPrompt.say("Getting all open tickets...");
+                            ts.displayAllPendingTickets();
                             break;
                         case "4":
+                            mainPrompt.say("Getting all tickets");
+                            ts.displayAllTickets();
+                            break;
+                        case "5":
                             int tid = Integer.parseInt(mainPrompt.ask("Please provide the numeric ID for the ticket you wish to respond to."));
                             ts.reviewTicket(tid);
                             break;

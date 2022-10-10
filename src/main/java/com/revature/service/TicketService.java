@@ -8,6 +8,7 @@ import com.revature.model.User;
 import com.revature.util.TicketStatus;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TicketService {
     Prompt ticketPrompt = Prompt.getPrompt();
@@ -90,6 +91,20 @@ public class TicketService {
         TicketDAO td = new TicketDAOImpl();
 
         List<ReimbursementTicket> tickets = td.getAllTickets();
+
+        for (ReimbursementTicket ticket : tickets){
+            prettyPrint(ticket);
+            ticketPrompt.say("Ticket ID: " + ticket.getId());
+        }
+    }
+
+    public void displayAllPendingTickets(){
+        TicketDAO td = new TicketDAOImpl();
+
+        List<ReimbursementTicket> tickets = td.getAllTickets();
+
+        //java is a good and normal language where good and normal lines like this happen
+        tickets = tickets.stream().filter(ticket -> ticket.getStatus().equals(TicketStatus.PENDING)).collect(Collectors.toList());
 
         for (ReimbursementTicket ticket : tickets){
             prettyPrint(ticket);
