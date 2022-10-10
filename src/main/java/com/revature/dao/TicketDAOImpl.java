@@ -2,13 +2,11 @@ package com.revature.dao;
 
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
-import com.revature.service.UserService;
 import com.revature.util.ConnectionUtil;
 import com.revature.util.TicketStatus;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class TicketDAOImpl implements TicketDAO{
     @Override
@@ -73,6 +71,10 @@ public class TicketDAOImpl implements TicketDAO{
     public List<ReimbursementTicket> getAllTickets() {
         List<ReimbursementTicket> tickets = new ArrayList<>();
 
+        // i want to keep track of users i pull from the database in the while loop
+        // so that we're not making so many unnecessary calls to db,
+        // so im going to store them in this map
+        Map<Integer, User> knownUsersById = new HashMap<>();
         UserDAO ud = new UserDAOImpl();
 
         try (Connection conn = ConnectionUtil.getConnection()){
@@ -91,7 +93,16 @@ public class TicketDAOImpl implements TicketDAO{
                     Timestamp created = rs.getTimestamp("created_time");
                     Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
 
-                    User foundUser = ud.getById(user_id);
+                    User foundUser;
+
+                    if (knownUsersById.containsKey(user_id)) {
+                        foundUser = knownUsersById.get(user_id);
+                    } else {
+                        // call the userDAO method only if we didn't already grab this
+                        // user's info, also store them in the map here.
+                        foundUser = ud.getById(user_id);
+                        knownUsersById.put(user_id, foundUser);
+                    }
 
                     tickets.add(new ReimbursementTicket(id,foundUser,amt,desc,status,created,fulfilled));
                 }
