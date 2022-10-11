@@ -11,7 +11,7 @@ import java.util.Map;
 public class UserService {
 
     Prompt userPrompt = Prompt.getPrompt();
-    public User login(){
+    public User loginCLI(){
 
         String uname = userPrompt.ask("Please input a username.");
         String pass  = userPrompt.ask("Please enter your Password");
@@ -30,12 +30,12 @@ public class UserService {
         userPrompt.say("Enter 1 to try again, or press Enter to return to Main Menu.");
 
         if (userPrompt.ask().equals("1")){
-            u = login();
+            u = loginCLI();
         }
         return u;
     }
 
-    public User register(){
+    public User registerCLI(){
         UserDAO userDao = new UserDAOImpl();
         User newUser = null;
 
@@ -54,12 +54,12 @@ public class UserService {
         userPrompt.say("Enter 1 to try again, or press Enter to return to Main Menu.");
 
         if (userPrompt.ask().equals("1")){
-            newUser = register();
+            newUser = registerCLI();
         }
         return newUser;
     }
 
-    public int displayTicketInfo(User user){
+    public int displayTicketInfoCLI(User user){
         UserDAO userDao = new UserDAOImpl();
         Map<String, Integer> info = userDao.countUserTickets(user);
 

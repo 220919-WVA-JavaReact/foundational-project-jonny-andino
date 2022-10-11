@@ -1,9 +1,6 @@
 package com.revature.servlets;
-import com.google.gson.Gson;
 import com.revature.controller.Prompt;
-import com.revature.dao.TicketDAO;
-import com.revature.dao.TicketDAOImpl;
-import com.revature.model.ReimbursementTicket;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

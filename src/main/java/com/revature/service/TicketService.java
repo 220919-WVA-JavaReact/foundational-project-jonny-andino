@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class TicketService {
     Prompt ticketPrompt = Prompt.getPrompt();
 
-    public void submitTicket(User loggedInUser){
+    public void submitTicketCLI(User loggedInUser){
         TicketDAO td = new TicketDAOImpl();
         ReimbursementTicket t = null;
 
@@ -28,16 +28,16 @@ public class TicketService {
             }
         } else {
             ticketPrompt.say("Please be sure to add a full amount and description to your ticket.");
-            submitTicket(loggedInUser);
+            submitTicketCLI(loggedInUser);
         }
 
     }
 
-    public void reviewTicket(int id){
+    public void reviewTicketCLI(int id){
         TicketDAO td = new TicketDAOImpl();
 
         ReimbursementTicket ticket = td.getTicketById(id);
-        prettyPrint(ticket);
+        prettyPrintCLI(ticket);
 
         ticketPrompt.say("Once you have reviewed the ticket contents, please select a status to apply to the ticket.");
         ticketPrompt.say("1 - Approve");
@@ -62,7 +62,7 @@ public class TicketService {
                 ticketPrompt.say("Sorry, that wasn't a valid option");
                 ticketPrompt.say("Enter 1 to try again, or press Enter to return to the Admin Dashboard");
                 if (ticketPrompt.ask().equals("1")){
-                    reviewTicket(id);
+                    reviewTicketCLI(id);
                 }
                 break;
         }
@@ -75,30 +75,30 @@ public class TicketService {
         }
     }
 
-    public void displayUserTickets(User user){
+    public void displayUserTicketsCLI(User user){
         TicketDAO td = new TicketDAOImpl();
 
         List<ReimbursementTicket> tickets = td.getTicketsByUser(user);
 
         for (ReimbursementTicket ticket : tickets){
-            prettyPrint(ticket);
+            prettyPrintCLI(ticket);
         }
     }
 
 
 
-    public void displayAllTickets(){
+    public void displayAllTicketsCLI(){
         TicketDAO td = new TicketDAOImpl();
 
         List<ReimbursementTicket> tickets = td.getAllTickets();
 
         for (ReimbursementTicket ticket : tickets){
-            prettyPrint(ticket);
+            prettyPrintCLI(ticket);
             ticketPrompt.say("Ticket ID: " + ticket.getId());
         }
     }
 
-    public void displayAllPendingTickets(){
+    public void displayAllPendingTicketsCLI(){
         TicketDAO td = new TicketDAOImpl();
 
         List<ReimbursementTicket> tickets = td.getAllTickets();
@@ -107,12 +107,12 @@ public class TicketService {
         tickets = tickets.stream().filter(ticket -> ticket.getStatus().equals(TicketStatus.PENDING)).collect(Collectors.toList());
 
         for (ReimbursementTicket ticket : tickets){
-            prettyPrint(ticket);
+            prettyPrintCLI(ticket);
             ticketPrompt.say("Ticket ID: " + ticket.getId());
         }
     }
 
-    private void prettyPrint(ReimbursementTicket t){
+    private void prettyPrintCLI(ReimbursementTicket t){
         ticketPrompt.label("REIMBURSEMENT TICKET");
         ticketPrompt.say("Status: " + t.getStatus());
         ticketPrompt.say("User: " + t.getUser().getUsername());

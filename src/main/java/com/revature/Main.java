@@ -35,7 +35,7 @@ public class Main {
 
                     switch(mainPrompt.ask()){
                         case "1": // login
-                            loggedInUser = us.login();
+                            loggedInUser = us.loginCLI();
                             if (loggedInUser != null) {
 
                                 currentPage = (loggedInUser.isAdmin()) ? Page.ADMIN : Page.USER;
@@ -48,7 +48,7 @@ public class Main {
                             }
                             break;
                         case "2": // register
-                            loggedInUser = us.register();
+                            loggedInUser = us.registerCLI();
                             if (loggedInUser != null) {
                                 currentPage = Page.USER;
                                 // only if we're sure we have successfully registered a user
@@ -79,7 +79,7 @@ public class Main {
                     mainPrompt.label("USER DASHBOARD");
                     mainPrompt.say("Welcome, " + loggedInUser.getUsername() + "!");
 
-                    int ticketCount = us.displayTicketInfo(loggedInUser);
+                    int ticketCount = us.displayTicketInfoCLI(loggedInUser);
                     // displayTicketInfo makes a preemptive call to the database when you load the user page.
                     // and returns that count in the form of an integer, as well as outputs relevant info
                     // to the page.
@@ -116,10 +116,10 @@ public class Main {
                             // the home page from here.
                             break;
                         case "2": // create ticket
-                            ts.submitTicket(loggedInUser);
+                            ts.submitTicketCLI(loggedInUser);
                             break;
                         case "3": // view tickets
-                            ts.displayUserTickets(loggedInUser);
+                            ts.displayUserTicketsCLI(loggedInUser);
                             break;
                         case "4": // admin menu
                             if (loggedInUser.isAdmin()) {
@@ -154,15 +154,15 @@ public class Main {
                             break;
                         case "3": // view all tickets
                             mainPrompt.say("Getting all open tickets...");
-                            ts.displayAllPendingTickets();
+                            ts.displayAllPendingTicketsCLI();
                             break;
                         case "4":
                             mainPrompt.say("Getting all tickets");
-                            ts.displayAllTickets();
+                            ts.displayAllTicketsCLI();
                             break;
                         case "5":
                             int tid = Integer.parseInt(mainPrompt.ask("Please provide the numeric ID for the ticket you wish to respond to."));
-                            ts.reviewTicket(tid);
+                            ts.reviewTicketCLI(tid);
                             break;
                     }
                     break;
