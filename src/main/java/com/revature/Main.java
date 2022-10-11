@@ -1,6 +1,6 @@
 package com.revature;
 
-import com.revature.controller.Page;
+import com.revature.controller.CLIPage;
 import com.revature.model.User;
 import com.revature.service.TicketService;
 import com.revature.service.UserService;
@@ -13,7 +13,7 @@ public class Main {
         UserService us    = new UserService();
         TicketService ts  = new TicketService();
         User loggedInUser = null;
-        Page currentPage  = Page.HOME;
+        CLIPage currentPage  = CLIPage.HOME;
 
         boolean running   = true;
         while(running){
@@ -38,7 +38,7 @@ public class Main {
                             loggedInUser = us.loginCLI();
                             if (loggedInUser != null) {
 
-                                currentPage = (loggedInUser.isAdmin()) ? Page.ADMIN : Page.USER;
+                                currentPage = (loggedInUser.isAdmin()) ? CLIPage.ADMIN : CLIPage.USER;
                                 // only if we're sure we have a logged-in user, change the page.
 
                                 // since we are running in a loop, the program will circle back to the top,
@@ -50,7 +50,7 @@ public class Main {
                         case "2": // register
                             loggedInUser = us.registerCLI();
                             if (loggedInUser != null) {
-                                currentPage = Page.USER;
+                                currentPage = CLIPage.USER;
                                 // only if we're sure we have successfully registered a user
                                 // (and logged them in), change the page
                             }
@@ -108,7 +108,7 @@ public class Main {
                     switch(mainPrompt.ask()){
                         case "1": // logout
                             mainPrompt.say("Logging out...");
-                            currentPage = Page.HOME;
+                            currentPage = CLIPage.HOME;
                             loggedInUser = null;
 
                             // again our while loop takes care of bringing us back to the start of the program
@@ -123,7 +123,7 @@ public class Main {
                             break;
                         case "4": // admin menu
                             if (loggedInUser.isAdmin()) {
-                                currentPage = Page.ADMIN;
+                                currentPage = CLIPage.ADMIN;
                             } else {
                                 mainPrompt.say("Sorry, you don't have access to this menu...");
                                 // even though we aren't showing the menu option to non-admins, we still want to make
@@ -145,12 +145,12 @@ public class Main {
                     switch(mainPrompt.ask()){
                         case "1": // logout
                             mainPrompt.say("Logging out...");
-                            currentPage  = Page.HOME;
+                            currentPage  = CLIPage.HOME;
                             loggedInUser = null;
                             break;
                         case "2": // Return to user menu
                             mainPrompt.say("Returning to User Menu...");
-                            currentPage = Page.USER;
+                            currentPage = CLIPage.USER;
                             break;
                         case "3": // view all tickets
                             mainPrompt.say("Getting all open tickets...");

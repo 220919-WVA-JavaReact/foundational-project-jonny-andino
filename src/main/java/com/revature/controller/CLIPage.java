@@ -1,6 +1,6 @@
 package com.revature.controller;
 
-public enum Page {
+public enum CLIPage {
     HOME,
     USER,
     ADMIN
