@@ -1,5 +1,7 @@
 package com.revature.controller;
 
+import com.google.gson.Gson;
+
 import java.util.Scanner;
 
 public class Prompt {
@@ -11,6 +13,8 @@ public class Prompt {
         return (p == null) ? new Prompt() : p;
     }
     private static final Scanner input = new Scanner(System.in);
+
+    private static final Gson json = new Gson();
 
     public static String ask(){
         return input.nextLine();
@@ -27,6 +31,10 @@ public class Prompt {
 
     public void label(String label){
         System.out.println("---------" + label + "---------");
+    }
+
+    public String jsonify(Object artifact){
+        return json.toJson(artifact);
     }
 
     public void clear(){
