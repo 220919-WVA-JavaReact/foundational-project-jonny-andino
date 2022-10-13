@@ -10,7 +10,7 @@ import com.revature.util.TicketStatus;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TicketService {
+public class TicketServiceCLI {
     Prompt ticketPrompt = Prompt.getPrompt();
 
     public void submitTicketCLI(User loggedInUser){

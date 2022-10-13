@@ -2,16 +2,16 @@ package com.revature;
 
 import com.revature.controller.CLIPage;
 import com.revature.model.User;
-import com.revature.service.TicketService;
-import com.revature.service.UserService;
+import com.revature.service.TicketServiceCLI;
+import com.revature.service.UserServiceCLI;
 import com.revature.controller.Prompt;
 
 public class Main {
 
     public static void main(String[] args) {
         Prompt mainPrompt = Prompt.getPrompt();
-        UserService us    = new UserService();
-        TicketService ts  = new TicketService();
+        UserServiceCLI us    = new UserServiceCLI();
+        TicketServiceCLI ts  = new TicketServiceCLI();
         User loggedInUser = null;
         CLIPage currentPage  = CLIPage.HOME;
 

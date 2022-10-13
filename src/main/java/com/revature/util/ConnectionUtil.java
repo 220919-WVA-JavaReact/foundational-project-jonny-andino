@@ -53,4 +53,13 @@ public class ConnectionUtil {
 
         return conn;
     }
+
+    static{
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("failed to load the PostgreSQL driver");
+            throw new RuntimeException(e);
+        }
+    }
 }

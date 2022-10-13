@@ -11,9 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 @WebServlet(value = "/register")
-public class RegisterServlet extends HttpServlet {
+public class UserServlet extends HttpServlet {
 
     private static final Prompt prompt = Prompt.getPrompt();
 

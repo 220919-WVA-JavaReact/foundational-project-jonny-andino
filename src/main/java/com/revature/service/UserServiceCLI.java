@@ -8,7 +8,7 @@ import com.revature.controller.Prompt;
 import java.util.Base64;
 import java.util.Map;
 
-public class UserService {
+public class UserServiceCLI {
 
     Prompt userPrompt = Prompt.getPrompt();
     public User loginCLI(){
