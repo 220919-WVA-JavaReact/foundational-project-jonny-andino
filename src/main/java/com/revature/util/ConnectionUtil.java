@@ -2,9 +2,12 @@ package com.revature.util;
 
 //represents a physical connection to our database
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 //singleton connection instance
 public class ConnectionUtil {
@@ -26,17 +29,28 @@ public class ConnectionUtil {
             return null;
         }
 
-        String url = System.getenv("url");
-        String username = System.getenv("username");
-        String password = System.getenv("password");
+        String url      = "";
+        String username = "";
+        String password = "";
+
+        Properties prop = new Properties();
 
         try {
-            //System.out.println("Creating new connection...");
-            conn = DriverManager.getConnection(url, username, password);
+            prop.load(new FileReader("src/main/resources/application.properties"));
+
+            url      = prop.getProperty("url");
+            username = prop.getProperty("username");
+            password = prop.getProperty("password");
+
+            conn = DriverManager.getConnection(url,username,password);
+        } catch (IOException e) {
+            System.out.println("Properties file not found");
+            throw new RuntimeException(e);
         } catch (SQLException e) {
-            System.out.println("Couldn't establish connection...");
+            System.out.println("Could not establish connection");
             throw new RuntimeException(e);
         }
+
         return conn;
     }
 }
