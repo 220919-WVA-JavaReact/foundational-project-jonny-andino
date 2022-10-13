@@ -1,7 +1,9 @@
 package com.revature.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class Prompt {
@@ -12,9 +14,13 @@ public class Prompt {
     public static Prompt getPrompt(){
         return (p == null) ? new Prompt() : p;
     }
+
+    // various objects that i only want there to be one of
     private static final Scanner input = new Scanner(System.in);
 
     private static final Gson json = new Gson();
+
+    public static ObjectMapper mapper = new ObjectMapper();
 
     public static String ask(){
         return input.nextLine();
@@ -29,6 +35,9 @@ public class Prompt {
         System.out.println(msg);
     }
 
+    public void log(String msg) {
+        System.out.println("[LOG]: - " + LocalDateTime.now() + " - " + msg);
+    }
     public void label(String label){
         System.out.println("---------" + label + "---------");
     }
