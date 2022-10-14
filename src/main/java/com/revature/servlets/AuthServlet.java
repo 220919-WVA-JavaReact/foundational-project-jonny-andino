@@ -98,7 +98,9 @@ public class AuthServlet extends HttpServlet {
 
         if (session != null){
             User user = mapper.readValue((String) session.getAttribute("auth-user"), User.class);
-            System.out.println("logging out: " + user.getUsername());
+            prompt.log("logging out: " + user.getUsername());
+
+            session.invalidate();
         }
     }
 }
