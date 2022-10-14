@@ -46,6 +46,14 @@ public class TicketServlet extends HttpServlet {
         String providedDescription = (String) credentials.get("description");
 
         TicketServiceAPI ts = new TicketServiceAPI();
-        boolean success = ts.submitTicket(loggedInUser,providedAmount,providedDescription);
+
+        if (ts.submitTicket(loggedInUser,providedAmount,providedDescription)){
+            HashMap<String, Object> successMsg = new HashMap<>();
+            successMsg.put("Status", 200);
+            successMsg.put("Message", "Successfully posted ticket.");
+            successMsg.put("Timestamp", LocalDateTime.now().toString());
+
+            resp.getWriter().write(mapper.writeValueAsString(successMsg));
+        }
     }
 }
