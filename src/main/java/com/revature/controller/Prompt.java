@@ -36,7 +36,7 @@ public class Prompt {
     }
 
     public void log(String msg) {
-        System.out.println("[LOG]: - " + LocalDateTime.now() + " - " + msg);
+        System.out.println("[LOG] - " + LocalDateTime.now() + " - " + msg);
     }
     public void label(String label){
         System.out.println("---------" + label + "---------");

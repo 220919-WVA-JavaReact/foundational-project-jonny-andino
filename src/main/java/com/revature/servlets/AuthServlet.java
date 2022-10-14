@@ -24,6 +24,8 @@ public class AuthServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // register new user
+
         resp.setContentType("application/json");
         // store the provided registration info in a hashmap
 
@@ -31,7 +33,7 @@ public class AuthServlet extends HttpServlet {
         String providedUsername = (String) credentials.get("username");
         String providedPassword = (String) credentials.get("password");
 
-        // return a user if login successful
+        // return a user if registration successful
         UserServiceAPI us = new UserServiceAPI();
         User registeredUser = us.register(providedUsername,providedPassword);
 
@@ -49,9 +51,9 @@ public class AuthServlet extends HttpServlet {
         resp.setStatus(400);
 
         HashMap<String, Object> errorMsg = new HashMap<>();
-        errorMsg.put("Error code", 400);
-        errorMsg.put("Message", "There was an issue with your tissue");
-        errorMsg.put("Timestamp", LocalDateTime.now().toString());
+        errorMsg.put("code", 400);
+        errorMsg.put("message", "There was an issue with your tissue");
+        errorMsg.put("timestamp", LocalDateTime.now().toString());
 
         resp.getWriter().write(mapper.writeValueAsString(errorMsg));
     }
@@ -84,9 +86,9 @@ public class AuthServlet extends HttpServlet {
         resp.setStatus(400);
 
         HashMap<String, Object> errorMsg = new HashMap<>();
-        errorMsg.put("Error code", 400);
-        errorMsg.put("Message", "No user found with provided credentials");
-        errorMsg.put("Timestamp", LocalDateTime.now().toString());
+        errorMsg.put("code", 400);
+        errorMsg.put("message", "No user found with provided credentials");
+        errorMsg.put("timestamp", LocalDateTime.now().toString());
 
         resp.getWriter().write(mapper.writeValueAsString(errorMsg));
     }
