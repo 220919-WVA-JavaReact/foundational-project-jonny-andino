@@ -21,7 +21,7 @@ public class ConnectionUtil {
         // if there is, return it
         try {
             if (conn != null && !conn.isClosed()){
-                System.out.println("Using a previously made connection.");
+                //System.out.println("Using a previously made connection.");
                 return conn;
             }
         } catch (SQLException e) {

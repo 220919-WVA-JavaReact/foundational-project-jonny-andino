@@ -38,7 +38,7 @@ public class AuthServlet extends HttpServlet {
         User registeredUser = us.register(providedUsername,providedPassword);
 
         if (registeredUser != null) {
-            prompt.log("successfully registered user");
+            prompt.log("Successfully registered user (id: " + registeredUser.getId() + ")");
             HttpSession session = req.getSession();
 
             session.setAttribute("auth-user", mapper.writeValueAsString(registeredUser));
@@ -50,9 +50,11 @@ public class AuthServlet extends HttpServlet {
 
         resp.setStatus(400);
 
+        prompt.log("Unsuccessful registration attempt");
+
         HashMap<String, Object> errorMsg = new HashMap<>();
         errorMsg.put("code", 400);
-        errorMsg.put("message", "There was an issue with your tissue");
+        errorMsg.put("message", "There was an issue with your registration");
         errorMsg.put("timestamp", LocalDateTime.now().toString());
 
         resp.getWriter().write(mapper.writeValueAsString(errorMsg));
@@ -73,7 +75,7 @@ public class AuthServlet extends HttpServlet {
         User loggedInUser = us.login(providedUsername,providedPassword);
 
         if (loggedInUser != null) {
-            prompt.log("found user");
+            prompt.log("Successfully logged in user (id: " + loggedInUser.getId() + ")");
             HttpSession session = req.getSession();
 
             session.setAttribute("auth-user", mapper.writeValueAsString(loggedInUser));
@@ -82,6 +84,8 @@ public class AuthServlet extends HttpServlet {
             resp.getWriter().write(mapper.writeValueAsString(loggedInUser));
             return;
         }
+
+        prompt.log("Unsuccessful login attempt");
 
         resp.setStatus(400);
 
@@ -100,7 +104,7 @@ public class AuthServlet extends HttpServlet {
 
         if (session != null){
             User user = mapper.readValue((String) session.getAttribute("auth-user"), User.class);
-            prompt.log("logging out: " + user.getUsername());
+            prompt.log("Successfully logged out user (id: " + user.getId() + ")");
 
             session.invalidate();
         }

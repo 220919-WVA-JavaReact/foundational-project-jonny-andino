@@ -53,6 +53,8 @@ public class TicketServlet extends HttpServlet {
         TicketServiceAPI ts = new TicketServiceAPI();
 
         if (ts.submitTicket(loggedInUser,providedAmount,providedDescription)){
+            prompt.log("Successfully posted new ticket.");
+
             HashMap<String, Object> successMsg = new HashMap<>();
             successMsg.put("code", 201);
             successMsg.put("message", "Successfully posted ticket.");
@@ -60,6 +62,8 @@ public class TicketServlet extends HttpServlet {
 
             resp.setStatus(201);
             resp.getWriter().write(mapper.writeValueAsString(successMsg));
+        } else {
+            prompt.log("There was an issue posting this ticket");
         }
     }
 
