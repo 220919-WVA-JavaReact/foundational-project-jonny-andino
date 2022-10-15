@@ -20,23 +20,20 @@ import java.util.List;
 @WebServlet("/ticket")
 public class TicketServlet extends HttpServlet {
     private static final Prompt prompt = Prompt.getPrompt();
+    private static final ObjectMapper mapper = Prompt.mapper;
+    private static User loggedInUser;
 
-    private final ObjectMapper mapper = Prompt.mapper;
-
+    // check for a logged-in user before calling any of the other methods
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // post a new ticket
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         resp.setContentType("application/json");
-        // store the provided registration info in a hashmap
-
-        // check for a logged-in user
         HttpSession session = req.getSession(false); // if they don't have a session do not make one!
 
         if (session == null){
             HashMap<String, Object> errorMsg = new HashMap<>();
             errorMsg.put("code", 400);
-            errorMsg.put("message", "No user found with provided credentials");
+            errorMsg.put("message", "You must be logged in to perform this action");
             errorMsg.put("timestamp", LocalDateTime.now().toString());
 
             resp.setStatus(400);
@@ -44,7 +41,16 @@ public class TicketServlet extends HttpServlet {
             return;
         }
 
-        User loggedInUser = mapper.readValue((String) session.getAttribute("auth-user"), User.class);
+        loggedInUser = mapper.readValue((String) session.getAttribute("auth-user"), User.class);
+
+        super.service(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // post new ticket method
+
+        // store the provided registration info in a hashmap
 
         HashMap<String, Object> credentials = mapper.readValue(req.getInputStream(), HashMap.class);
         String providedAmount      = (String) credentials.get("amount");
@@ -69,24 +75,7 @@ public class TicketServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // view tickets
-        resp.setContentType("application/json");
-        // get the user
-        HttpSession session = req.getSession(false);
-
-        // validate session
-        if (session == null){
-            HashMap<String, Object> errorMsg = new HashMap<>();
-            errorMsg.put("code", 401);
-            errorMsg.put("message", "You must be logged in to view user tickets.");
-            errorMsg.put("timestamp", LocalDateTime.now().toString());
-
-            resp.setStatus(401);
-            resp.getWriter().write(mapper.writeValueAsString(errorMsg));
-            return;
-        }
-
-        User loggedInUser = mapper.readValue((String) session.getAttribute("auth-user"), User.class);
+        // view tickets method
 
         // make request for tickets on the user's behalf
         TicketServiceAPI ts = new TicketServiceAPI();

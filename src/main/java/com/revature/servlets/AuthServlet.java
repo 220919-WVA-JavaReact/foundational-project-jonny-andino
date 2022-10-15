@@ -19,8 +19,7 @@ import java.util.HashMap;
 public class AuthServlet extends HttpServlet {
 
     private static final Prompt prompt = Prompt.getPrompt();
-
-    private final ObjectMapper mapper = Prompt.mapper;
+    private static final ObjectMapper mapper = Prompt.mapper;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

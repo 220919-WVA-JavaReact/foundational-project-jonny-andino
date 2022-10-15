@@ -22,10 +22,9 @@ import java.util.List;
 public class ManagerServlet extends HttpServlet {
 
     private static final Prompt prompt = Prompt.getPrompt();
-    private final ObjectMapper mapper = Prompt.mapper;
-    private User loggedInUser;
-    private HttpSession session;
-    private TicketServiceAPI ts = new TicketServiceAPI();
+    private static final ObjectMapper mapper = Prompt.mapper;
+    private static User loggedInUser;
+    private final TicketServiceAPI ts = new TicketServiceAPI();
 
 
     @Override
@@ -35,7 +34,7 @@ public class ManagerServlet extends HttpServlet {
 
         resp.setContentType("application/json");
 
-        session = req.getSession(false);
+        HttpSession session = req.getSession(false);
 
         if (session == null){
             prompt.log("Prevented non-logged-in user from accessing manager functionality");
