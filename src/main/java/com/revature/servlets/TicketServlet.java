@@ -97,6 +97,7 @@ public class TicketServlet extends HttpServlet {
                 t.put("ticket_id", ticket.getId());
                 t.put("ticket_status", ticket.getStatus());
                 t.put("ticket_description", ticket.getDescription());
+                t.put("ticket_amount", ts.floorDoubleToPrecision(ticket.getAmount(), 2));
                 t.put("created_time", ticket.getCreatedTime().toString());
                 if (ticket.getFulfilledTime() != null){
                     t.put("fulfilled_time", ticket.getFulfilledTime().toString());

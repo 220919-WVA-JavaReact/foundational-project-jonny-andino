@@ -41,6 +41,16 @@ public class TicketServiceAPI {
 
         ReimbursementTicket ticket = td.getTicketById(id);
 
-        return td.updateTicketStatus(ticket, status);
+        // closed tickets can not be reupdated
+
+        if (ticket.getStatus() == TicketStatus.UNDER_REVIEW || ticket.getStatus() == TicketStatus.PENDING){
+            return td.updateTicketStatus(ticket, status);
+        }
+        return false;
+    }
+
+    public double floorDoubleToPrecision(double val, int precision){
+        int scale = (int) Math.pow(10, precision);
+        return (double) Math.floor(val * scale) / scale;
     }
 }

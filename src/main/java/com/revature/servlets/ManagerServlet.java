@@ -15,8 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/manager")
 public class ManagerServlet extends HttpServlet {
@@ -74,7 +76,24 @@ public class ManagerServlet extends HttpServlet {
 
         resp.setContentType("application/json");
         List<ReimbursementTicket> tickets = ts.getAllPendingTickets();
-        resp.getWriter().write(mapper.writeValueAsString(tickets));
+
+        List<Map<String, Object>> msg = new ArrayList<>();
+
+        for (ReimbursementTicket ticket: tickets){
+            Map<String, Object> t = new HashMap<>();
+            t.put("ticket_owner", ticket.getUser().getUsername());
+            t.put("ticket_id", ticket.getId());
+            t.put("ticket_status", ticket.getStatus());
+            t.put("ticket_description", ticket.getDescription());
+            t.put("ticket_amount", ts.floorDoubleToPrecision(ticket.getAmount(), 2));
+            t.put("created_time", ticket.getCreatedTime().toString());
+            if (ticket.getFulfilledTime() != null){
+                t.put("fulfilled_time", ticket.getFulfilledTime().toString());
+            }
+            msg.add(t);
+        }
+
+        resp.getWriter().write(mapper.writeValueAsString(msg));
     }
 
     @Override
@@ -101,7 +120,15 @@ public class ManagerServlet extends HttpServlet {
             resp.setStatus(200);
             resp.getWriter().write(mapper.writeValueAsString(successMsg));
         } else {
-            prompt.log("There was an issue updating this ticket");
+            prompt.log("This ticket could not be updated.");
+
+            HashMap<String, Object> errorMsg = new HashMap<>();
+            errorMsg.put("code", 409);
+            errorMsg.put("message", "Error: could not update already closed ticket.");
+            errorMsg.put("timestamp", LocalDateTime.now().toString());
+
+            resp.setStatus(409);
+            resp.getWriter().write(mapper.writeValueAsString(errorMsg));
         }
     }
 }
