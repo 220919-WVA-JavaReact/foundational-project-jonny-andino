@@ -53,7 +53,7 @@ public class AuthServlet extends HttpServlet {
 
         HashMap<String, Object> errorMsg = new HashMap<>();
         errorMsg.put("code", 400);
-        errorMsg.put("message", "There was an issue with your registration");
+        errorMsg.put("message", "Error: this username is already taken.");
         errorMsg.put("timestamp", LocalDateTime.now().toString());
 
         resp.getWriter().write(mapper.writeValueAsString(errorMsg));
@@ -100,12 +100,32 @@ public class AuthServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //logout method
         HttpSession session = req.getSession(false); // false means do not create a session if one is not found
+        resp.setContentType("application/json");
 
         if (session != null){
             User user = mapper.readValue((String) session.getAttribute("auth-user"), User.class);
             prompt.log("Successfully logged out user (id: " + user.getId() + ")");
 
             session.invalidate();
+
+            resp.setStatus(200);
+
+            HashMap<String, Object> msg = new HashMap<>();
+            msg.put("code", 200);
+            msg.put("message", "Successfully logged out");
+            msg.put("timestamp", LocalDateTime.now().toString());
+
+            resp.getWriter().write(mapper.writeValueAsString(msg));
+        } else {
+            prompt.log("Attempted log out with no user found in session");
+            resp.setStatus(304);
+
+            HashMap<String, Object> msg = new HashMap<>();
+            msg.put("code", 304);
+            msg.put("message", "No user to log out");
+            msg.put("timestamp", LocalDateTime.now().toString());
+
+            resp.getWriter().write(mapper.writeValueAsString(msg));
         }
     }
 }

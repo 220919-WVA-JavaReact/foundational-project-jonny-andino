@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/ticket")
 public class TicketServlet extends HttpServlet {
@@ -84,7 +86,25 @@ public class TicketServlet extends HttpServlet {
 
         if (tickets != null){
             resp.setStatus(200);
-            resp.getWriter().write(mapper.writeValueAsString(tickets));
+
+            // i don't want to show every attribute to every ticket, especially not passwords
+            //so, let's create a list of maps to send off instead
+            List<Map<String, Object>> msg = new ArrayList<>();
+
+            for (ReimbursementTicket ticket: tickets){
+                Map<String, Object> t = new HashMap<>();
+                t.put("ticket_owner", ticket.getUser().getUsername());
+                t.put("ticket_id", ticket.getId());
+                t.put("ticket_status", ticket.getStatus());
+                t.put("ticket_description", ticket.getDescription());
+                t.put("created_time", ticket.getCreatedTime().toString());
+                if (ticket.getFulfilledTime() != null){
+                    t.put("fulfilled_time", ticket.getFulfilledTime().toString());
+                }
+                msg.add(t);
+            }
+
+            resp.getWriter().write(mapper.writeValueAsString(msg));
         }
     }
 }
