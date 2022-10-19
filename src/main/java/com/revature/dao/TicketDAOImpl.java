@@ -101,6 +101,79 @@ public class TicketDAOImpl implements TicketDAO{
     }
 
     @Override
+    public List<ReimbursementTicket> getTicketsByStatus(TicketStatus status) {
+        List<ReimbursementTicket> tickets = new ArrayList<>();
+
+        Map<Integer, User> knownUsersById = new HashMap<>();
+        UserDAO ud = new UserDAOImpl();
+
+        try (Connection conn = ConnectionUtil.getConnection()){
+            String sql = "SELECT * FROM tickets WHERE status = ?::ticket_status";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, status.toString());
+            ResultSet rs;
+
+            if ((rs = stmt.executeQuery()) != null) {
+                while (rs.next()){
+                    int id = rs.getInt("ticket_id");
+                    float amt = rs.getFloat("amount");
+                    String desc = rs.getString("description");
+                    int user_id = rs.getInt("user_id");
+                    ReimbursementType type = ReimbursementType.valueOf(rs.getString("type"));
+                    Timestamp created = rs.getTimestamp("created_time");
+                    Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
+
+                    User foundUser;
+
+                    if (knownUsersById.containsKey(user_id)) {
+                        foundUser = knownUsersById.get(user_id);
+                    } else {
+                        foundUser = ud.getById(user_id);
+                        knownUsersById.put(user_id, foundUser);
+                    }
+
+                    tickets.add(new ReimbursementTicket(id,foundUser,amt,desc,status,type,created,fulfilled));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tickets;
+    }
+
+    @Override
+    public List<ReimbursementTicket> getTicketsByUserType(ReimbursementType type, User user) {
+        List<ReimbursementTicket> tickets = new ArrayList<>();
+
+        try (Connection conn = ConnectionUtil.getConnection()){
+            String sql = "SELECT * FROM tickets WHERE type = ?::ticket_type AND user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setString(1, type.toString());
+            stmt.setInt(2, user.getId());
+            ResultSet rs;
+
+            if ((rs = stmt.executeQuery()) != null) {
+                while (rs.next()){
+                    int id = rs.getInt("ticket_id");
+                    float amt = rs.getFloat("amount");
+                    String desc = rs.getString("description");
+                    TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
+                    Timestamp created = rs.getTimestamp("created_time");
+                    Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
+
+
+                    tickets.add(new ReimbursementTicket(id,user,amt,desc,status,type,created,fulfilled));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tickets;
+    }
+
+    @Override
     public List<ReimbursementTicket> getAllTickets() {
         List<ReimbursementTicket> tickets = new ArrayList<>();
 

@@ -26,16 +26,16 @@ public class TicketServiceAPI {
         return false;
     }
 
-    public List<ReimbursementTicket> displayUserTickets(User user){
+    public List<ReimbursementTicket> displayUserTickets(User user, ReimbursementType type){
+
+        if (type != ReimbursementType.ALL) return td.getTicketsByUserType(type, user);
 
         return td.getTicketsByUser(user);
     }
 
     public List<ReimbursementTicket> getAllPendingTickets(){
 
-        List<ReimbursementTicket> tickets = td.getAllTickets();
-
-        return tickets.stream().filter(ticket -> ticket.getStatus().equals(TicketStatus.PENDING)).collect(Collectors.toList());
+        return td.getTicketsByStatus(TicketStatus.PENDING);
     }
 
     public boolean reviewTicket(int id, TicketStatus status){

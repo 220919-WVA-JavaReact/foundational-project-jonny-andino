@@ -84,7 +84,9 @@ public class TicketServlet extends HttpServlet {
         // make request for tickets on the user's behalf
         TicketServiceAPI ts = new TicketServiceAPI();
 
-        List<ReimbursementTicket> tickets = ts.displayUserTickets(loggedInUser);
+        ReimbursementType type = ReimbursementType.valueOf(req.getParameter("type"));
+
+        List<ReimbursementTicket> tickets = ts.displayUserTickets(loggedInUser, type);
 
         if (tickets != null){
             resp.setStatus(200);
