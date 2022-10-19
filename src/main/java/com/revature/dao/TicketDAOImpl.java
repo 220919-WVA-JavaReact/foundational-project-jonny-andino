@@ -3,6 +3,7 @@ package com.revature.dao;
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
+import com.revature.util.ReimbursementType;
 import com.revature.util.TicketStatus;
 
 import java.sql.*;
@@ -30,12 +31,13 @@ public class TicketDAOImpl implements TicketDAO{
                 float amt = rs.getFloat("amount");
                 String desc = rs.getString("description");
                 TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
+                ReimbursementType type = ReimbursementType.valueOf(rs.getString("type"));
                 Timestamp created = rs.getTimestamp("created_time");
                 Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
 
                 User foundUser = ud.getById(user_id);
 
-                ticket = new ReimbursementTicket(id,foundUser,amt,desc,status,created,fulfilled);
+                ticket = new ReimbursementTicket(id,foundUser,amt,desc,status,type,created,fulfilled);
             }
         } catch(SQLException e){
             //System.out.println("No user found.");
@@ -47,14 +49,15 @@ public class TicketDAOImpl implements TicketDAO{
     public boolean postNewTicket(ReimbursementTicket ticket) {
         try (Connection conn = ConnectionUtil.getConnection()){
             String sql =
-                "INSERT INTO tickets (user_id,amount,description,created_time)" +
-                "VALUES (?,?,?,?)";
+                "INSERT INTO tickets (user_id, amount, description, type, created_time)" +
+                "VALUES (?,?,?,?::ticket_type,?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
 
             stmt.setInt(1, ticket.getUser().getId());
             stmt.setDouble(2, ticket.getAmount());
             stmt.setString(3,ticket.getDescription());
-            stmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+            stmt.setString(4, ticket.getType().toString());
+            stmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
 
             int rowsUpdated = stmt.executeUpdate();
 
@@ -84,10 +87,11 @@ public class TicketDAOImpl implements TicketDAO{
                     float amt = rs.getFloat("amount");
                     String desc = rs.getString("description");
                     TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
+                    ReimbursementType type = ReimbursementType.valueOf(rs.getString("type"));
                     Timestamp created = rs.getTimestamp("created_time");
                     Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
 
-                    tickets.add(new ReimbursementTicket(id,user,amt,desc,status,created,fulfilled));
+                    tickets.add(new ReimbursementTicket(id,user,amt,desc,status,type,created,fulfilled));
                 }
             }
         } catch (SQLException e) {
@@ -119,6 +123,7 @@ public class TicketDAOImpl implements TicketDAO{
                     float amt = rs.getFloat("amount");
                     String desc = rs.getString("description");
                     TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
+                    ReimbursementType type = ReimbursementType.valueOf(rs.getString("type"));
                     Timestamp created = rs.getTimestamp("created_time");
                     Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
 
@@ -133,7 +138,7 @@ public class TicketDAOImpl implements TicketDAO{
                         knownUsersById.put(user_id, foundUser);
                     }
 
-                    tickets.add(new ReimbursementTicket(id,foundUser,amt,desc,status,created,fulfilled));
+                    tickets.add(new ReimbursementTicket(id,foundUser,amt,desc,status,type,created,fulfilled));
                 }
             }
         } catch (SQLException e) {

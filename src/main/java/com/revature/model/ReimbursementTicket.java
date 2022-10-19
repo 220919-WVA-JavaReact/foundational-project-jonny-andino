@@ -1,5 +1,6 @@
 package com.revature.model;
 
+import com.revature.util.ReimbursementType;
 import com.revature.util.TicketStatus;
 
 import java.sql.Timestamp;
@@ -11,6 +12,8 @@ public class ReimbursementTicket {
     private double amount;
     private String description;
     private TicketStatus status;
+
+    private ReimbursementType type;
     private Timestamp createdTime;
     private Timestamp fulfilledTime;
 
@@ -48,6 +51,24 @@ public class ReimbursementTicket {
         this.user = user;
         this.amount = amount;
         this.description = description;
+    }
+
+    public ReimbursementTicket(User user, double amount, String description, ReimbursementType type) {
+        this.user = user;
+        this.amount = amount;
+        this.description = description;
+        this.type = type;
+    }
+
+    public ReimbursementTicket(int id, User user, double amount, String description, TicketStatus status, ReimbursementType type, Timestamp createdTime, Timestamp fulfilledTime) {
+        this.id = id;
+        this.user = user;
+        this.amount = amount;
+        this.description = description;
+        this.status = status;
+        this.type = type;
+        this.createdTime = createdTime;
+        this.fulfilledTime = fulfilledTime;
     }
 
     public int getId() {
@@ -106,6 +127,14 @@ public class ReimbursementTicket {
         this.fulfilledTime = fulfilledTime;
     }
 
+    public ReimbursementType getType() {
+        return type;
+    }
+
+    public void setType(ReimbursementType type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "ReimbursementTicket{" +
@@ -114,6 +143,7 @@ public class ReimbursementTicket {
                 ", amount=" + amount +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", type=" + type +
                 ", createdTime=" + createdTime +
                 ", fulfilledTime=" + fulfilledTime +
                 '}';
@@ -124,11 +154,11 @@ public class ReimbursementTicket {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReimbursementTicket that = (ReimbursementTicket) o;
-        return id == that.id && Double.compare(that.amount, amount) == 0 && user.equals(that.user) && description.equals(that.description) && status == that.status && createdTime.equals(that.createdTime) && fulfilledTime.equals(that.fulfilledTime);
+        return id == that.id && Double.compare(that.amount, amount) == 0 && user.equals(that.user) && description.equals(that.description) && status == that.status && type == that.type && createdTime.equals(that.createdTime) && fulfilledTime.equals(that.fulfilledTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, amount, description, status, createdTime, fulfilledTime);
+        return Objects.hash(id, user, amount, description, status, type, createdTime, fulfilledTime);
     }
 }

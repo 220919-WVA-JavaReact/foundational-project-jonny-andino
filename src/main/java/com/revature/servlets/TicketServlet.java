@@ -5,6 +5,7 @@ import com.revature.controller.Prompt;
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
 import com.revature.service.TicketServiceAPI;
+import com.revature.util.ReimbursementType;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -57,10 +58,11 @@ public class TicketServlet extends HttpServlet {
         HashMap<String, Object> credentials = mapper.readValue(req.getInputStream(), HashMap.class);
         String providedAmount      = (String) credentials.get("amount");
         String providedDescription = (String) credentials.get("description");
+        ReimbursementType providedType = ReimbursementType.valueOf((String) credentials.get("type"));
 
         TicketServiceAPI ts = new TicketServiceAPI();
 
-        if (ts.submitTicket(loggedInUser,providedAmount,providedDescription)){
+        if (ts.submitTicket(loggedInUser, providedAmount, providedDescription, providedType)){
             prompt.log("Successfully posted new ticket.");
 
             HashMap<String, Object> successMsg = new HashMap<>();
@@ -96,6 +98,7 @@ public class TicketServlet extends HttpServlet {
                 t.put("ticket_owner", ticket.getUser().getUsername());
                 t.put("ticket_id", ticket.getId());
                 t.put("ticket_status", ticket.getStatus());
+                t.put("ticket_type", ticket.getType());
                 t.put("ticket_description", ticket.getDescription());
                 t.put("ticket_amount", ts.floorDoubleToPrecision(ticket.getAmount(), 2));
                 t.put("created_time", ticket.getCreatedTime().toString());

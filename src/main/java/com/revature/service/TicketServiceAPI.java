@@ -4,6 +4,7 @@ import com.revature.dao.TicketDAO;
 import com.revature.dao.TicketDAOImpl;
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
+import com.revature.util.ReimbursementType;
 import com.revature.util.TicketStatus;
 
 import java.util.List;
@@ -12,12 +13,12 @@ import java.util.stream.Collectors;
 public class TicketServiceAPI {
     private final TicketDAO td = new TicketDAOImpl();
 
-    public boolean submitTicket(User loggedInUser, String amount, String description){
+    public boolean submitTicket(User loggedInUser, String amount, String description, ReimbursementType type){
 
         ReimbursementTicket t = null;
 
         if (!amount.equals("") && !description.equals("")){
-            t = new ReimbursementTicket(loggedInUser, Double.parseDouble(amount), description);
+            t = new ReimbursementTicket(loggedInUser, Double.parseDouble(amount), description, type);
 
             return td.postNewTicket(t);
         }
