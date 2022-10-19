@@ -29,7 +29,7 @@ public class TicketDAOImpl implements TicketDAO{
                 int user_id = rs.getInt("user_id");
                 float amt = rs.getFloat("amount");
                 String desc = rs.getString("description");
-                TicketStatus status = statusFromString(rs.getString("status"));
+                TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
                 Timestamp created = rs.getTimestamp("created_time");
                 Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
 
@@ -83,7 +83,7 @@ public class TicketDAOImpl implements TicketDAO{
                     int id = rs.getInt("ticket_id");
                     float amt = rs.getFloat("amount");
                     String desc = rs.getString("description");
-                    TicketStatus status = statusFromString(rs.getString("status"));
+                    TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
                     Timestamp created = rs.getTimestamp("created_time");
                     Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
 
@@ -118,7 +118,7 @@ public class TicketDAOImpl implements TicketDAO{
                     int user_id = rs.getInt("user_id");
                     float amt = rs.getFloat("amount");
                     String desc = rs.getString("description");
-                    TicketStatus status = statusFromString(rs.getString("status"));
+                    TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
                     Timestamp created = rs.getTimestamp("created_time");
                     Timestamp fulfilled = rs.getTimestamp("fulfilled_time");
 
@@ -163,20 +163,5 @@ public class TicketDAOImpl implements TicketDAO{
         }
 
         return false;
-    }
-
-
-    private TicketStatus statusFromString(String str){
-        // there's probably a better way to do this lol
-        switch(str){
-            case "UNDER_REVIEW":
-                return TicketStatus.UNDER_REVIEW;
-            case "APPROVED":
-                return TicketStatus.APPROVED;
-            case "REJECTED":
-                return TicketStatus.REJECTED;
-            default:
-                return TicketStatus.PENDING;
-        }
     }
 }
