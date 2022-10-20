@@ -4,23 +4,27 @@ import com.revature.dao.UserDAO;
 import com.revature.dao.UserDAOImpl;
 import com.revature.model.User;
 import com.revature.controller.Prompt;
+import com.revature.util.AuthUtil;
 
 import java.util.Base64;
 import java.util.Map;
 
 public class UserServiceCLI {
 
-    Prompt userPrompt = Prompt.getPrompt();
+    private static final Prompt userPrompt = Prompt.getPrompt();
+    private static final AuthUtil auth = AuthUtil.getAuthUtil();
+    private static final UserDAO userDao = new UserDAOImpl();
     public User loginCLI(){
 
         String uname = userPrompt.ask("Please input a username.");
         String pass  = userPrompt.ask("Please enter your Password");
 
         userPrompt.say("Logging in...");
-        UserDAO userDao = new UserDAOImpl();
+
         User u = userDao.getByUsername(uname);
 
-        String encodedPass = Base64.getEncoder().encodeToString(pass.getBytes());
+        String salt = auth.retrieveUserSalt(uname);
+        String encodedPass = auth.getHashedPassword(pass, salt);
 
         if (u != null && u.getPassword().equals(encodedPass)) {
             return u;
@@ -36,7 +40,7 @@ public class UserServiceCLI {
     }
 
     public User registerCLI(){
-        UserDAO userDao = new UserDAOImpl();
+
         User newUser = null;
 
         String uname = userPrompt.ask("Please register a username.");
@@ -46,7 +50,9 @@ public class UserServiceCLI {
         User foundUser = userDao.getByUsername(uname);
 
         if (foundUser == null){
-            String encodedPass = Base64.getEncoder().encodeToString(pass.getBytes());
+            String salt = auth.createSalt();
+            auth.saveUserSalt(uname, salt);
+            String encodedPass = auth.getHashedPassword(pass, salt);
             newUser = userDao.registerNewUser(uname, encodedPass);
             return newUser;
         }
@@ -60,7 +66,7 @@ public class UserServiceCLI {
     }
 
     public int displayTicketInfoCLI(User user){
-        UserDAO userDao = new UserDAOImpl();
+
         Map<String, Integer> info = userDao.countUserTickets(user);
 
         // start with an empty string
