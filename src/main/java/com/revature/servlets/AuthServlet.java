@@ -42,17 +42,21 @@ public class AuthServlet extends HttpServlet {
 
             session.setAttribute("auth-user", mapper.writeValueAsString(registeredUser));
 
-            resp.setStatus(200);
-            resp.getWriter().write(mapper.writeValueAsString(registeredUser));
+            resp.setStatus(201);
+            HashMap<String, Object> successMsg = new HashMap<>();
+            successMsg.put("code",201);
+            successMsg.put("message", "Successfully registered " + registeredUser.getUsername() + ". Welcome!");
+            successMsg.put("timestamp", LocalDateTime.now().toString());
+            resp.getWriter().write(mapper.writeValueAsString(successMsg));
             return;
         }
 
-        resp.setStatus(400);
+        resp.setStatus(409);
 
         prompt.log("Unsuccessful registration attempt");
 
         HashMap<String, Object> errorMsg = new HashMap<>();
-        errorMsg.put("code", 400);
+        errorMsg.put("code", 409);
         errorMsg.put("message", "Error: this username is already taken.");
         errorMsg.put("timestamp", LocalDateTime.now().toString());
 
@@ -80,7 +84,12 @@ public class AuthServlet extends HttpServlet {
             session.setAttribute("auth-user", mapper.writeValueAsString(loggedInUser));
 
             resp.setStatus(200);
-            resp.getWriter().write(mapper.writeValueAsString(loggedInUser));
+            HashMap<String, Object> successMsg = new HashMap<>();
+            successMsg.put("code",200);
+            successMsg.put("message", "Welcome back, " + loggedInUser.getUsername() + "!");
+            successMsg.put("admin", loggedInUser.isAdmin());
+            successMsg.put("timestamp", LocalDateTime.now().toString());
+            resp.getWriter().write(mapper.writeValueAsString(successMsg));
             return;
         }
 
@@ -112,7 +121,7 @@ public class AuthServlet extends HttpServlet {
 
             HashMap<String, Object> msg = new HashMap<>();
             msg.put("code", 200);
-            msg.put("message", "Successfully logged out");
+            msg.put("message", "Successfully logged out. See you soon, " + user.getUsername() + "!");
             msg.put("timestamp", LocalDateTime.now().toString());
 
             resp.getWriter().write(mapper.writeValueAsString(msg));

@@ -22,8 +22,9 @@ public class UserServiceAPI {
     private static final Prompt prompt = Prompt.getPrompt();
     private static final ObjectMapper mapper = Prompt.mapper;
 
+    private static final UserDAO userDao = new UserDAOImpl();
+
     public User login(String username, String password) {
-        UserDAO userDao = new UserDAOImpl();
         User u = userDao.getByUsername(username);
 
         String salt = retrieveUserSalt(username);
@@ -39,7 +40,6 @@ public class UserServiceAPI {
     }
 
     public User register(String username, String password) {
-        UserDAO userDao = new UserDAOImpl();
 
         User foundUser = userDao.getByUsername(username);
 
@@ -50,6 +50,11 @@ public class UserServiceAPI {
             return userDao.registerNewUser(username, encodedPass);
         }
         return null;
+    }
+
+    public boolean updateUserStatus(int userId, boolean isAdmin){
+
+        return userDao.changeUserRole(userId, isAdmin);
     }
 
     private String getHashedPassword(String pass, String salt){

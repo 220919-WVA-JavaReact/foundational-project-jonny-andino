@@ -11,5 +11,7 @@ public interface UserDAO {
 
     User registerNewUser(String username, String password);
 
+    boolean changeUserRole (int userId, boolean isAdmin);
+
     Map<String, Integer> countUserTickets(User user);
 }

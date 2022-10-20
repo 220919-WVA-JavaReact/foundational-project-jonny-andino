@@ -3,10 +3,7 @@ package com.revature.dao;
 import com.revature.model.User;
 import com.revature.util.ConnectionUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,6 +89,26 @@ public class UserDAOImpl implements UserDAO{
             e.printStackTrace();
         }
         return u;
+    }
+
+    @Override
+    public boolean changeUserRole(int userId, boolean isAdmin) {
+        try (Connection conn = ConnectionUtil.getConnection()){
+            String sql = "UPDATE users SET is_admin = ? WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setBoolean(1,isAdmin);
+            stmt.setInt(2, userId);
+
+            int rowsUpdated = stmt.executeUpdate();
+
+            return (rowsUpdated > 0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override

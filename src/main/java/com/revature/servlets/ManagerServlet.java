@@ -5,6 +5,7 @@ import com.revature.controller.Prompt;
 import com.revature.model.ReimbursementTicket;
 import com.revature.model.User;
 import com.revature.service.TicketServiceAPI;
+import com.revature.service.UserServiceAPI;
 import com.revature.util.TicketStatus;
 
 import javax.servlet.ServletException;
@@ -27,6 +28,7 @@ public class ManagerServlet extends HttpServlet {
     private static final ObjectMapper mapper = Prompt.mapper;
     private static User loggedInUser;
     private final TicketServiceAPI ts = new TicketServiceAPI();
+    private final UserServiceAPI us = new UserServiceAPI();
 
 
     @Override
@@ -74,7 +76,6 @@ public class ManagerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // view all open tickets
 
-        resp.setContentType("application/json");
         List<ReimbursementTicket> tickets = ts.getAllPendingTickets();
 
         List<Map<String, Object>> msg = new ArrayList<>();
@@ -99,13 +100,26 @@ public class ManagerServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String action = req.getParameter("action");
+
+        switch(action){
+            case "update-ticket":
+                updateTicket(req,resp);
+                break;
+            case "update-user":
+                updateUser(req,resp);
+                break;
+        }
+    }
+
+    private void updateTicket(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // responding to a given ticket
-        resp.setContentType("application.json");
 
         HashMap<String, Object> inputData = mapper.readValue(req.getInputStream(), HashMap.class);
 
-        Integer ticketId       = (Integer) inputData.get("ticketId");
-        TicketStatus newStatus = TicketStatus.valueOf((String) inputData.get("newStatus"));
+        Integer ticketId       = (Integer) inputData.get("ticket_id");
+        TicketStatus newStatus = TicketStatus.valueOf((String) inputData.get("new_status"));
         // ^ this is the hardest line i ever wrote. i feel good at java now thanks
 
         if (ts.reviewTicket(ticketId,newStatus)){
@@ -132,4 +146,40 @@ public class ManagerServlet extends HttpServlet {
             resp.getWriter().write(mapper.writeValueAsString(errorMsg));
         }
     }
+
+    private void updateUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // responding to a given ticket
+
+        HashMap<String, Object> inputData = mapper.readValue(req.getInputStream(), HashMap.class);
+
+        Integer userId  = (Integer) inputData.get("user_id");
+        boolean isAdmin = (boolean) inputData.get("is_admin");
+        // ^ this is the hardest line i ever wrote. i feel good at java now thanks
+
+        if (us.updateUserStatus(userId, isAdmin)){
+            prompt.log("Successfully updated user (id: " + userId + " to status: " + ((isAdmin) ? "Administrator" : "User"));
+
+            HashMap<String, Object> successMsg = new HashMap<>();
+            successMsg.put("code", 200);
+            successMsg.put("message", "Successfully updated user.");
+            successMsg.put("user_id", userId);
+            successMsg.put("is_admin", isAdmin);
+            successMsg.put("timestamp", LocalDateTime.now().toString());
+
+            resp.setStatus(200);
+            resp.getWriter().write(mapper.writeValueAsString(successMsg));
+        } else {
+            prompt.log("This user could not be updated.");
+
+            HashMap<String, Object> errorMsg = new HashMap<>();
+            errorMsg.put("code", 409);
+            errorMsg.put("message", "Error: there was an issue updating this user's status.");
+            errorMsg.put("timestamp", LocalDateTime.now().toString());
+
+            resp.setStatus(409);
+            resp.getWriter().write(mapper.writeValueAsString(errorMsg));
+        }
+    }
 }
+
+
