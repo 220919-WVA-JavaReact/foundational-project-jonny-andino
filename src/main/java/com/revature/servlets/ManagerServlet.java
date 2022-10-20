@@ -63,11 +63,11 @@ public class ManagerServlet extends HttpServlet {
             prompt.log("Prevented non-authorized user (id: " + loggedInUser.getId() + ") from accessing manager functionality");
 
             HashMap<String, Object> errorMsg = new HashMap<>();
-            errorMsg.put("code", 401);
+            errorMsg.put("code", 403);
             errorMsg.put("message", "You must be an administrator to perform this action.");
             errorMsg.put("timestamp", LocalDateTime.now().toString());
 
-            resp.setStatus(401);
+            resp.setStatus(403);
             resp.getWriter().write(mapper.writeValueAsString(errorMsg));
         }
     }

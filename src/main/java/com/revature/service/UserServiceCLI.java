@@ -6,7 +6,6 @@ import com.revature.model.User;
 import com.revature.controller.Prompt;
 import com.revature.util.AuthUtil;
 
-import java.util.Base64;
 import java.util.Map;
 
 public class UserServiceCLI {

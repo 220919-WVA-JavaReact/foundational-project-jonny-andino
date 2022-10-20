@@ -73,7 +73,15 @@ public class TicketServlet extends HttpServlet {
             resp.setStatus(201);
             resp.getWriter().write(mapper.writeValueAsString(successMsg));
         } else {
-            prompt.log("There was an issue posting this ticket");
+            prompt.log("Unsuccessful ticket creation");
+
+            HashMap<String, Object> errorMsg = new HashMap<>();
+            errorMsg.put("code", 400);
+            errorMsg.put("message", "Error: You need to provide an amount, description, and ticket type in order to submit a new ticket.");
+            errorMsg.put("timestamp", LocalDateTime.now().toString());
+
+            resp.setStatus(400);
+            resp.getWriter().write(mapper.writeValueAsString(errorMsg));
         }
     }
 
